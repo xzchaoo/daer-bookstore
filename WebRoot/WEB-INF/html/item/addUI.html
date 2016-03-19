@@ -1,0 +1,168 @@
+<% var htmlHead={%>
+<title>添加书本</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [
+				{
+					name : '书本列表',
+					url : '${ctxPath}/item/listUI',
+				},
+				{
+					name : '添加书本',
+					url : '',
+				} ] );
+
+		$( '#addForm' ).validate( {
+			rules : {
+				'item.name' : {
+					required : true,
+					minlength : 1,
+					maxlength : 50,
+				},
+				'item.price' : {
+					required : true,
+					number : true,
+					min : 0,
+					max : 200000,
+				},
+				'item.remain' : {
+					required : true,
+					min : 0,
+					max : 10000,
+					digits : true,
+				},
+				'item.shortDescription' : {},
+				'item.longDescription' : {},
+			//	img : {
+			//		required : true,
+			//	}
+			},
+			messages : {
+				//img : {
+				//	required : '请选择图片',
+				//},
+				'item.name' : {
+					required : '请输入书名',
+					minlength : '书名的长度必须大于等于{0}',
+					maxlength : '书名的长度必须小于等于{0}',
+				},
+				'item.price' : {
+					required : '请输入价格',
+					number : '请输入一个非负数',
+					min : '价格必须大于等于{0}',
+					max : '价格必须小于等于{0}',
+				},
+				'item.remain' : {
+					required : '请输入库存量',
+					min : '剩余量必须大于等于{0}',
+					max : '剩余量必须小于等于{0}',
+					digits : '请输入一个非负整数',
+				},
+			},
+			success : function( element ) {
+				// element是那个错误标签
+				// 现在是success看你要怎么处置它
+				// 我们必须要把它remove掉
+				// 这样下次字段验证错误的时候就会因为
+				// 没有错误标签而重新生成,然后才会调用errorPlacement,否则errorPlacement只会被调用一次!
+				element.parent( ).removeClass( 'has-error' ).addClass( 'has-success' ).end( ).remove( ); // 给框框加上颜色
+			},
+			// errorPlacement : function( error , element ) {
+			// error.appendTo( element.parent( ).removeClass( 'has-success' ).addClass( 'has-error' ) );
+			// },
+			highlight : function( element , errorClass , valid ) {
+				$( element ).addClass( errorClass ).parent( ).removeClass( 'has-success' ).addClass( 'has-error' );
+			}
+		} );
+		$( '#imgFile' ).fileinput( {
+			minFileCount : 1,
+			maxFileCount : 1,
+			showUpload : false,
+			maxFileSize : 1024,
+		} );
+		$( '#category' ).chosen( {
+			disable_search_threshold : 3,
+		} );
+	} );
+</script>
+<%};%> <% var htmlBody={ %> <%if(!isEmpty(params.fieldErrorsString)) print(params.fieldErrorsString); %>
+<form id="addForm" class="form-horizontal" action="${ctxPath}/item/add" method="post" enctype="multipart/form-data">
+	<div class="row" style="height:300px;">
+		<div class="col-xs-4">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">名称</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.name" class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">作者</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.author" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">类别</label>
+				<div class="col-xs-9">
+					<select id="category" class="form-control" name="item.category.id">
+						<%for(var c in categoryList){%>
+							<option value="${c.id}">${c.name}</option>
+						<%}%>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">页数</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.page" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">价格</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.price" class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">库存</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.remain" class="form-control" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">简单描述</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.shortDescription" class="form-control" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-8">
+			<div class="form-group">
+				<label class="col-xs-1 control-label">图片</label>
+				<div class="col-xs-11">
+					<input id="imgFile" type="file" name="img" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group">
+				<label class="col-xs-1 control-label">详细描述</label>
+				<div class="col-xs-11">
+					<textarea name="item.longDescription" class="form-control" rows="20" cols="20" style="resize:none;"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success btn-block">提交</button>
+			</div>
+		</div>
+
+	</div>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+

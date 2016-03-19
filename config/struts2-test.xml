@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<constant name="struts.multipart.maxSize" value="20971520" />
+
+	<package name="test" namespace="/test" extends="parent-config">
+		<default-interceptor-ref name="myDefaultStack" />
+		<default-class-ref class="org.xzc.sshb.action.TestAction" />
+		<action name="test">
+			<result type="dispatcher">/index.jsp</result>
+		</action>
+		<action name="uploadUI" method="uploadUI">
+			<result>/WEB-INF/test/upload.html</result>
+		</action>
+		<action name="upload" method="upload">
+			<result type="json">
+				<param name="root">jsonResult</param>
+			</result>
+		</action>
+		<action name="jsview">
+			<result>/WEB-INF/test/jsview2.html</result>
+		</action>
+	</package>
+</struts>

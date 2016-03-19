@@ -1,0 +1,7 @@
+var config = {
+	'item' : {
+		required : {
+			msg : '请输入商品信息'
+		}
+	}
+}

@@ -1,0 +1,61 @@
+<% var htmlHead={%>
+<title>编辑用户</title>
+<style>
+.td-img {
+	width: 100px;
+}
+
+.td-name {
+	width: 200px;
+}
+
+.td-price {
+	width: 100px;
+}
+
+.td-quantity {
+	width: 100px;
+}
+
+.td-desc {
+	width: 200px;
+}
+
+.td-operation {
+	width: 200px;
+}
+</style>
+<%};%> <% var htmlBody={ %>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">订单编号: ${record.id} 日期: ${record.buyTime,dateFormat='yyyy-MM-dd'} 总价:
+					${record.totalPrice} 共有${record.itemCount}项商品 , ${record.evaluatedCount}项已经评价完毕.</h3>
+				
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-bordered table-hover table-responsive">
+					<%for(var ri in record.recordItems){ var ed=ri.star!=0; var oc=ed?'btn-success':'btn-warning'; var
+					txt=ed?'已评':'评价'; %>
+					<tr>
+						<td class="td-img">
+							<img src="${ctxPath}${ri.item.imgPath}" class="img-responsive" />
+						</td>
+						<td class="td-name">
+							<a href="${ctxPath}/item/viewDetailUI?item.id=${ri.item.id}">${ri.item.name}</a>
+						</td>
+						<td class="td-price">${ri.item.price}</td>
+						<td class="td-quantity">${ri.quantity}</td>
+						<td class="td-desc">${ri.item.shortDescription}</td>
+						<td class="td-operation">
+							<a href="${ctxPath}/record/doEvaluateRecordItemUI?recordItem.id=${ri.id}" class="btn ${oc}">${txt}</a>
+						</td>
+					</tr>
+					<%}%>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

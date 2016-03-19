@@ -1,0 +1,18 @@
+<% var htmlHead={%>
+<title>查看商品 ${item.name}</title>
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [
+				{
+					name : "商品列表",
+					url : "${ctxPath}/item/listUI?page=${page}"
+				},
+				{
+					name : "查看商品",
+					url : '',
+				} ] );
+	} );
+</script>
+<%};%> <% var htmlBody={ %> <%include('fragment/item-head.html',{item:item,buy:true}){}%>
+<%include('fragment/item-body.html',{item:item}){}%> <%};%>
+<%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

@@ -1,0 +1,190 @@
+<% var htmlHead={%>
+<title>书本列表, ${ai.name}</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [ {
+			name : '书本列表',
+			url : '',
+		} ] );
+	} );
+	q = {
+		rows : ${rows},
+		page : ${page},
+		total : ${total},
+		keyword : '${keyword!}',
+		category:${category},
+	};
+	$(function(){
+		$( '#category' ).val(${category}).chosen( {
+			disable_search_threshold : 3,
+		} ).change(function(){
+			location="${_absurl}?category="+$(this).val()+"&keyword="+q.keyword;
+			//alert($('#category').val());
+		});
+	});
+</script>
+<script type="text/javascript" src="${ctxPath}/js/my${_url}.js"></script>
+<%};%> <% var htmlBody={ %>
+
+<div class="row">
+	<div class="col-xs-3 pull-left">
+		<h3>书列表</h3>
+	</div>
+
+	<div class="col-xs-6 pull-right">
+		<form id="searchForm" class="form-inline pull-right">
+			<div id="errorContainer"class="input-group">
+			</div>
+			<div class="input-group">
+				<select id="category" name="category" class="form-control">
+						<option value="0">任意</option>
+					<%for(var c in categoryList){%>
+						<option value="${c.id}">${c.name}</option>
+					<%}%>
+				</select>
+			</div>
+			<div class="input-group">
+				<input id="keyword" type="text" class="form-control" placeholder="关键字" name="keyword" value="${keyword!}" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-default">
+						<i class="fa fa-search"></i>
+					</button>
+				</span>
+			</div>
+		</form>
+	</div>
+	<!-- 手动居中 
+	<div id="errorContainer" class="col-xs-3 text-right pull-right" style="padding:6px 12px;"></div>-->
+</div>
+
+
+<div class="row">
+	<div id="tbContainer" class="col-xs-12">
+		
+		<%#ajax tt:{%>
+		<table id="tt" class="table table-striped table-bordered table-hover table-responsive">
+			<thead>
+				<tr>
+					<%if(ai.admin){%>
+					<th class="td-item-id vlm">id</th>
+					<%}%>
+					<th class="td-item-img vlm">图片</th>
+					<th class="td-item-name vlm">名称</th>
+					<th class="td-item-author vlm">作者</th>
+					<th class="td-item-category vlm">类别</th>
+					<th class="td-item-price vlm text-center">价格</th>
+					<th class="td-item-remain vlm text-center">库存</th>
+					<th class="td-item-short vlm">简单描述</th>
+					<th class="td-item-operation vlm">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if ( isEmpty ( itemList ) ) {%> 没有数据...
+				<tr>
+					<td>
+						<a href="${ctxPath}/item/listUI">没有数据啊,回去吧</a>
+					</td>
+				</tr>
+				<%}else for(var item in itemList){%>
+				<tr>
+					<%if(ai.admin){%>
+					<td class="td-item-id">${item.id}</td>
+					<%}%>
+					<td class="td-item-img">
+						<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}&page=${page}">
+							<img id="item-img-${item.id}" src="${ctxPath}${item.imgPath}" class="thumbnail lazy td-img" />
+						</a>
+					</td>
+					<td class="td-item-name">
+						<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}&page=${page}">${item.name}</a>
+					</td>
+					<td class="td-item-author">${item.author}</td>
+					<td class="td-item-category">${item.category}</td>
+					<td class="td-item-price text-center">${item.price}</td>
+					<td class="td-item-remain text-center">${item.remain}</td>
+					<td class="td-item-short ">${item.shortDescription}</td>
+					<td class="td-item-operation">
+						<div class="btn-group-vertical btn-block">
+							<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}&page=${page}" class="btn btn-info">查看详情</a>
+							<%if(ai.logined){%>
+							<a class="btn btn-success addToCart" data-item-id='${item.id}'>加入购物车</a>
+							<%}%> <%if(ai.admin){%>
+							<a href="${ctxPath}/item/updateUI?item.id=${item.id}" class="btn btn-warning item-update">编辑</a>
+							<%}%>
+						</div>
+					</td>
+				</tr>
+				<%}%>
+
+			</tbody>
+		</table>
+		<script>
+			$( function( ) {
+				var ox = $( '#affix' ).offset( ).left;
+				var oy = $( '#affix' ).offset( ).top;
+				$( '.addToCart' ).click( function( ) {
+					if ( !xzc.logined ) {
+						alert( '你还没有登陆,先去登录吧' );
+						return;
+					}
+					var $this = $( this );
+					xzc.addToCart( {
+						'ids[0]' : $this.data( 'item-id' ),
+						'quantities[0]' : 1,
+						add : true
+					} , function( result ) {
+						if ( !result.success )
+							return;
+						var $oimg = $( '#item-img-' + $this.data( 'item-id' ) );
+						$oimg.clone( ).appendTo( $( 'body' ) ).css( {
+							left : $oimg.offset( ).left,
+							top : $oimg.offset( ).top,
+							position : 'absolute'
+						} ).animate( {
+							left : ox,
+							opacity : 0.5
+						} , 500 , function( ) {
+							$( this ).animate( {
+								top : oy,
+								opacity : 0
+							} , 500 , function( ) {
+								$( this ).remove( );
+							} );
+						} );
+					} );
+				} );
+				$( 'img.lazy' ).lazyload( {
+					//所以当你加载超大的图片的时候就会顿卡顿卡一下
+					threshold : 200,//表示距离200像素的时候就要开始加载图片了
+					//event:'click',//点击事件触发加载图片 如果想要页面加载10秒后自动加载所有图片的话需要这样做:自定义一个事件比如叫做abc,然后$(window).bind('load',function(){setTimeout(function(){$('img.lazy').trigger('abc')},10000)});
+					effect : 'fadeIn',
+				} );
+				/*$( '.img-wrapper' )
+						.magnificPopup( {
+							type : 'image',
+							cursor : null,
+							titleSrc : "test222",
+							mainClass : 'mfp-with-zoom',
+							gallery : {
+								enabled : true,
+								navigateByImgClick : true,
+								arrowMarkup : '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
+								tPrev : '上一个', // title for left button
+								tNext : '下一个',
+								tCounter : '<span class="mfp-counter">第%curr%页,共%total%页</span>' // markup of cou
+							},
+							zoom : {
+								enabled : true,
+								duration : 500,
+								easing : 'ease-in-out',
+							}
+						} );*/
+			} );
+		</script>
+		<%}%>
+	</div>
+	<div id="listUI-pager" class="col-xs-12 text-center"></div>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

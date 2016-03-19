@@ -1,0 +1,88 @@
+<%directive dynamic ai;%>
+<!-- 支持动态 -->
+<% var htmlHead={%>
+<title>显示订单, ${ai.name} </title>
+
+<script type="text/javascript" src="${ctxPath}/js/jsviews.js"></script>
+<script>
+$( function( ) {
+	xzc.setSecondNav( [ {
+		name : '订单列表',
+		url : '',
+	} ] );
+} );
+</script>
+<%};%> <% var htmlBody={ %>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<%if(total==0){%>
+						您当前没有订单, <a href="${ctxPath}/item/listUI">先去买点东西吧</a>
+					<%}else{%>
+						${ai.name} ,您好,共有 <span id="total">${total}</span> 个订单.
+					<%}%>
+					<span class="pull-right">
+						<%if(ai.admin){%>
+						<a href="${ctxPath}/record/debug1" class="btn btn-danger" style="margin-top:-8px;">设置所有订单为"买家已付款"</a>
+						<a href="${ctxPath}/record/repair" class="btn btn-danger" style="margin-top:-8px;">修复订单</a>
+						<a href="${ctxPath}/record/sendRightNow" class="btn btn-danger" style="margin-top:-8px;">立即发货</a>
+						<%}%>
+					</span>
+				</h3>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">&nbsp;
+						<span id="states" class="pull-right"><span class="pull-left">订单类型:</span>&nbsp;
+						<a data-state="0" href="${_absurl}?state=0" class="btn btn-default" style="margin-top:-8px;">全部</a>
+						<a data-state="${ai.state.RECORD_PAID}" href="${_absurl}?state=${ai.state.RECORD_PAID}" class="btn btn-default" style="margin-top:-8px;">已付款</a>
+						<a data-state="${ai.state.RECORD_SENT}" href="${_absurl}?state=${ai.state.RECORD_SENT}" class="btn btn-default" style="margin-top:-8px;">已发货</a>
+						<a data-state="${ai.state.RECORD_RECEIVED}" href="${_absurl}?state=${ai.state.RECORD_RECEIVED}" class="btn btn-default" style="margin-top:-8px;">已收货</a>
+						<a data-state="${ai.state.RECORD_CANCELED}" href="${_absurl}?state=${ai.state.RECORD_CANCELED}" class="btn btn-default" style="margin-top:-8px;">被取消</a>
+						<a data-state="${ai.state.RECORD_FINISHED}" href="${_absurl}?state=${ai.state.RECORD_FINISHED}" class="btn btn-default" style="margin-top:-8px;">已完成</a>
+						<a data-state="${ai.state.RECORD_DELETED}" href="${_absurl}?state=${ai.state.RECORD_DELETED}" class="btn btn-default" style="margin-top:-8px;">已删除</a>
+					</span>
+					<script>
+						$('#states > a[data-state=${state}]').addClass('btn-success');
+						//通过ajax方式加载 而不是刷新页面 不过 当你需要刷新页面的时候就出现问题了==//(不会记录上次所选的订单类型)
+						/*$('#states > a').attr('href','javascript:void(0)').click(function(){
+							var $this=$(this);
+							$('#listUI-wrapper').load('${_absurl}',{state:$(this).data('state'),ajax:'records'},function(){
+								$this.addClass('btn-success').siblings().removeClass('btn-success');
+							});
+						});
+						*/
+					</script>
+				</h3>
+			</div>
+		</div>
+	</div>
+	
+	<div id="listUI-wrapper" class="col-xs-12">
+
+		<%#ajax records:{%>
+			
+			<% for(var record in records){%>
+				<%include('/WEB-INF/html/record/fragment/record.html',{record:record}){}%>
+			<%}%>
+			<div id="listUI-pager" class="text-center"></div>
+			<script>
+			<%include('/js/my/record/listUI.js'){}%>
+			<%include('/js/my/record/fragment/initRecord.js'){}%>
+			</script>
+			
+		<%}%>
+
+	</div>
+
+	
+</div>
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<!-- 全局结果
+		和默认类
+		//注意如果你在这里放了一个action,并且设置了默认拦截器
+		//然后又有子包继承了user包,并且也设置了默认拦截器
+		//那么子包的默认拦截器会作用于父包的action 所以要拆开package 小心!
+	-->
+	<package name="user" namespace="/user" extends="parent-config">
+		<!-- 默认类 -->
+		<default-class-ref class="org.xzc.sshb.action.UserAction" />
+	</package>
+
+
+	<!-- 所有人都可以访问的ajax -->
+	<package name="user-ajax" namespace="/user" extends="user">
+		<default-interceptor-ref name="myDefaultStack" />
+		<!-- 公开的action 查询名字的可用性 -->
+		<global-results>
+			<result type="json">
+				<param name="root">jsonResult</param>
+			</result>
+		</global-results>
+		<action name="checkNameAvailableAjax" method="checkNameAvailableAjax" />
+		<action name="checkNameExistsAjax" method="checkNameExistsAjax" />
+	</package>
+
+	<!-- 没登陆才可以做的事情 -->
+	<package name="user-no-login" namespace="/user" extends="user">
+		<default-interceptor-ref name="preventLoginStack" />
+		<global-results>
+			<!-- 注册 -->
+			<result name="registerUISuccess">/WEB-INF/html/user/registerUI.html</result>
+			<!-- 注册成功后自动 登陆 送去个人中心看余额 -->
+			<result name="registerSuccess" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">注册成功,为表诚意,我们已经赠送您100元余额,欢迎您购物.</param>
+				<param name="url">/user/viewUserUI</param>
+			</result>
+
+			<!-- <result name="registerInput">/WEB-INF/html/user/registerUI.html</result> -->
+			<result name="registerInput" type="redirect">
+				<param name="location">/user/registerUI</param>
+				<!-- 因为我们的ai并不是在值栈 而是在contextMap里 所以需要用# -->
+				<param name="fieldErrorsString">${#ai.fieldErrorsString}</param>
+			</result>
+
+			<!-- <result name="registerInput" type="dispatcher">/index.jsp</result> -->
+			<!-- 登陆和注销 -->
+			<result name="loginUISuccess">/WEB-INF/html/user/loginUI.html</result>
+			<result name="loginInput" type="redirect">
+				<param name="location">/user/loginUI</param>
+				<param name="fieldErrorsString">${#ai.fieldErrorsString}</param>
+			</result>
+			<result name="loginSuccess" type="redirect">
+				<param name="location">/index</param>
+			</result>
+			<result name="loginWrongPassword" type="redirect">
+				<param name="location">/user/loginUI</param>
+				<param name="msg">密码错误</param>
+			</result>
+		</global-results>
+		<action name="loginUI" method="loginUI" />
+		<action name="login" method="login" />
+		<action name="registerUI" method="registerUI" />
+		<action name="register" method="register" />
+	</package>
+
+	<!-- 登陆了才可以做的事情 -->
+	<package name="user-login" namespace="/user" extends="user">
+		<default-interceptor-ref name="loginStack" />
+		<global-results>
+			<!-- 查看 -->
+			<result name="viewUserUISuccess">/WEB-INF/html/user/viewUserUI.html</result>
+			<result name="logoutSuccess" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">注销成功,点我回主页</param>
+				<param name="url">/index</param>
+			</result>
+			<result name="updateSuccess" type="redirect">/user/viewUserUI?msg=123</result>
+
+		</global-results>
+		<action name="logout" method="logout" />
+		<action name="viewUserUI" method="viewUserUI" />
+		<action name="update" method="update" />
+	</package>
+
+	<!-- 管理员才可以做的事情 -->
+	<package name="user-admin" namespace="/user" extends="user">
+		<default-interceptor-ref name="adminStack" />
+
+		<global-results>
+			<result name="deleteSuccess" type="redirect">/user/listUI</result>
+			<!-- 修改 -->
+			<result name="updateByAdminUISuccess">/WEB-INF/html/user/updateByAdminUI.html</result>
+			<result name="updateByAdminSuccess" type="redirect">/user/updateByAdminUI?user.id=${user.id}</result>
+			<result name="listUISuccess">/WEB-INF/html/user/listUI.html</result>
+			<result name="addUISuccess">/WEB-INF/html/user/addUI.html</result>
+		</global-results>
+
+		<action name="listUI" method="listUI" />
+
+		<action name="updateByAdminUI" method="updateByAdminUI" />
+		<action name="updateByAdmin" method="updateByAdmin" />
+
+		<action name="deleteUI" method="deleteUI" />
+		<action name="delete" method="delete" />
+
+		<!-- 直接创建一个用户(指定各种参数信息) -->
+		<action name="addUI" method="addUI" />
+		<action name="add" method="add" />
+
+	</package>
+
+</struts>

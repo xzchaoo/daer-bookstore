@@ -1,0 +1,137 @@
+<%var htmlHead={%>
+<title>欢迎注册</title>
+<script src="${ctxPath}/js/my/public/datepicker.js"></script>
+<script type="text/javascript" src="${ctxPath}/js/my/user.js"></script>
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [ {
+			name : "注册",
+			url : '',
+		} ] );
+		var vrf = xzc.validateForm( $( '#registerForm' ) , 'user' );
+		$( '#email' ).autocomplete( {
+			source : function( value , callback ) {
+				var suffix = [
+						"@qq.com",
+						"@163.com",
+						"@sina.com.cn" ];
+				var term = value.term;
+				if ( term.indexOf( '@' ) != -1 ) {
+					term = term.substring( 0 , term.indexOf( '@' ) );
+				}
+				callback( _.map( suffix , function( suffix ) {
+					return term + suffix;
+				} ) );
+			},
+			delay : 0
+		} );
+		<%if(!isEmpty(params.fieldErrorsString)){
+			//调用这个函数将fieldErrors(是一个map)序列化
+			//否则它默认的toString不符合json格式
+			//好屌...
+			%>
+		//对jquery对象validate后得到的vrf 已经不再是普通的jquery对象了
+		//此时它是validator对象 并拥有一些方法 (可以使用xzc.dump打印出来看看,或查看源代码)
+		//此时有一个函数可以显示出错误
+		//alert('${fieldErrors}'.replace( '=' , ':' ));
+		//alert('${errors}');
+		vrf.showErrors( ${params.fieldErrorsString} );
+
+		//$( '#registerForm' ).validate( {
+		//	debug : true
+		//} );
+		//xzc.dump(vrf);
+		//$('#registerForm').submit( ).validate( {
+		//	debug : false
+		//} );
+		//$( '#registerForm button[type="submit"]' ).click( );
+		<%}%>
+
+		//	选中性别
+		$( '#sex > option' ).eq( ${user.sex!0} ).prop( 'selected' , true );
+		xzc.datepicker( '#birthday' , {
+			onClose : function( ) {
+				vrf.element( '#birthday' );
+			}
+		} );
+	} );
+</script>
+<%};%> <%var htmlBody={%>
+<div class="row">
+	<div id="registerUI-col-4" class="col-xs-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="col-xs-12">
+							<form id="registerForm" class="form-horizontal" action="${ctxPath}/user/register" method="post">
+
+								<div class="form-group">
+									<label class="col-xs-4 control-label">账号</label>
+									<div class="col-xs-8">
+										<input id="name" class="form-control" type="text" name="user.name" placeholder="账号" value="${user.name!}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-xs-4 control-label">密码</label>
+									<div class="col-xs-8">
+										<input class="form-control" type="password" name="user.password" placeholder="密码" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-xs-4 control-label">邮箱</label>
+									<div class="col-xs-8">
+										<input id="email" type="text" class="form-control" name="user.email" placeholder="邮箱" value="${user.email!}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-xs-4 control-label">出生日期</label>
+									<div class="col-xs-8">
+										<input id="birthday" type="text" class="form-control" name="user.birthday"
+											value="${user.birthday!,'yyyy-MM-dd'}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<button id="moreConfigBtn" type="button" class="btn btn-default">
+										更多设置<i class="fa fa-arrow-down"></i>
+									</button>
+								</div>
+
+								<div id="moreConfig" style="display:none;">
+									暂时不生效
+									<div class="form-group">
+										<label class="col-xs-3 control-label">性别</label>
+										<div class="col-xs-9">
+											<select id="sex" class="form-control" name="user.sex">
+												<option value="0">保密</option>
+												<option value="1">男</option>
+												<option value="2">女</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-xs-3 control-label">地址</label>
+										<div class="col-xs-9">
+											<input type="text" class="form-control" value="${user.address!}" name="user.address" />
+										</div>
+									</div>
+
+								</div>
+
+								<div class="form-group">
+									<button type="submit" class="btn btn-info btn-block">注册</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-8"><%include('/WEB-INF/include/ad.html'){}%></div>
+</div>
+
+
+<%};%> <%include('/WEB-INF/include/template.html',{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+

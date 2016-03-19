@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh_cn">
+<meta charset="utf-8">
+<head>
+<base href="http://127.0.0.1:8080/ssh_beetl_1/" />
+
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/messenger/messenger.js"></script>
+<script type="text/javascript" src="js/messenger/messenger-theme-future.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+
+<link href="css/messenger/messenger.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-future.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-future.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-air.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-flat.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-ice.css" rel="stylesheet">
+<link href="css/messenger/messenger-spinner.css" rel="stylesheet">
+<script>
+	//http://github.hubspot.com/messenger/
+	Msg = Messenger;
+	$( function( ) {
+		$( '#b1' ).click( function( ) {
+			var m = Msg( ).post( {//可以指定一个id,同id的msg只会出现一个
+				message : "世界将要灭亡了",
+				type : "error",
+				showCloseButton : true,
+				hideAfter : 10,
+				hideOnNavigate : false,
+				actions : {
+					retry : {
+						label : "再试一次",
+						phrase : "phrase!",
+						auto : true,
+						delay : 3,//3秒后自动执行这个动作
+						action : _.once( function( ) {
+							alert( "使你妹夫" );
+						} )
+					},
+					shenmegui : {
+						label : "什么鬼",
+						phrase : "phrase!",
+						auto : true,
+						delay : 4,//3秒后自动执行这个动作
+						action : function( ) {
+							alert( "shen me gui" );
+						}
+					},
+					cancel : {
+						label : "我来拯救世界",
+						action : function( ) {
+							m.update( {
+								message : "世界被我拯救了",
+								type : "success",
+								actions : false,
+								hideAfter : 1,
+							} );
+						}
+					}
+				}
+			} );
+		} );
+		var M2 = Msg( {
+			theme : "future",
+			parentLocations : [ '#d2','body' ],
+		} );
+		$( '#b2' ).click( function( ) {
+			var i = 0;
+			var m = M2.run( {//会出现一个滚轮
+				id : "b2",
+				errorMessage : "error",
+				successMessage : "success",
+				action : function( opt ) {
+					if ( ++i < 3 ) {
+						opt.error( {
+							status : 500,
+							readyState : 0,
+							responseText : 0
+						} );
+					} else {
+						opt.success( );
+						//alert(_.functions(opt));
+					}
+				}
+			} );
+
+		} );
+		$( '#b3' ).click( function( ) {
+			var m = Msg( ).run( {
+				successMessage : "成功",
+				errorMessage : "失败",
+				progressMessage : "ing",
+				action : function( opt ) {
+					opt.success( );
+				}
+			} );
+		} );
+
+		Messenger( ).info( {
+			message : "你有新的消息,请注意查收.",
+			showCloseButton : true,
+			//closeButtonText : "滚",
+			actions : {
+				view : {
+					label : "查看",
+					action : function( ) {
+						alert( "看你个毛线" );
+					}
+				}
+			}
+		} );
+
+		$( '#b4' ).click( function( ) {
+			var msg = Messenger( ).post( {
+				theme : 'future',
+				message : "I'm sorry Hal, I just can't do that.",
+				actions : {
+					retry : {
+						label : 'retry now',
+						phrase : 'Retrying TIME',
+						auto : true,
+						delay : 10,
+						action : function( ) {
+						}
+					},
+					cancel : {
+						action : function( ) {
+							return msg.cancel( );
+						}
+					}
+				}
+			} );
+		} );
+
+		var data = '';
+		var M5 = Msg( {
+			theme : "future",
+		} );
+		$( '#b5' ).click( function( ) {
+			var m = M5.ajax( {
+				progressMessage : "正在拉取信息...",
+				successMessage : function( ) {
+					return data;
+				},
+				errorMessage : "拉取信息失败...",
+				//showSuccessWithoutError:true
+				//ignoredErrorCodes
+				//returnsPromise
+				retry : false,
+			} , {
+				url : "jsp/1.jsp",
+				data : {
+					name : "xzc"
+				},
+				cache : false,
+				error : function( res ) {
+				},
+				success : function( res ) {
+					data = res.name;
+				}
+			} );
+		} );
+
+		/*var m = Msg( {extraClasses: 'messenger-fixed messenger-on-left messenger-on-top'
+		} ).post( "你好啊" );
+		_.delay( function( ) {
+			m.update( {
+				message : "好个毛线",
+			} );
+			_.delay( function( ) {
+				m.hide( )
+			} , 1000 )
+		} , 1000 );
+		 */
+		/*//弹出一个框框在右下角
+		Msg( ).post( 'Welcome to the darkside (tm)' );
+		Msg( ).post( {
+			message : "How's it going?",
+			type : "error" //其实就是指示那个小点的颜色
+		} );
+		Msg( ).post( {
+			message : "晚上好",
+			type : 'info',
+			hideAfter : 3,//3秒后隐藏
+			showCloseButton : true,//可关闭
+		} );
+		 */
+
+		/*
+		The full list of options:
+		message: The text of the message
+		type: info, error or success are understood by the provided themes. You can also pass your own string, and that class will be added.
+		theme: What theme class should be applied to the message? Defaults to the theme set for Messenger in general.
+		id: A unique id. If supplied, only one message with that ID will be shown at a time.
+		singleton: Hide the newer message if there is an id collision, as opposed to the older message.
+		actions: Action links to put in the message, see the 'Actions' section on this page.
+		hideAfter: Hide the message after the provided number of seconds
+		hideOnNavigate: Hide the message if Backbone client-side navigation occurs
+		showCloseButton: Should a close button be added to the message?
+		closeButtonText: Specify the text the close button should use (default ×)
+		Messenger also includes aliases which set the type for you: Messenger().error(), Messenger().success(), and messenger().info().
+		
+		
+		# Rather than hiding and showing multiple messages
+		# you can also maintain a single message between
+		# requests.
+		msg = Messenger().run()
+		Messenger().run({messageInstance: msg})
+
+		
+		
+		 */
+	} );
+</script>
+</head>
+<body style="height: 2000px;">
+	<button id="b1">特技1</button>
+	<button id="b2">特技2</button>
+	<button id="b3">特技3</button>
+	<button id="b4">特技4</button>
+	<button id="b5">特技5,获得msg.txt内容</button>
+	<div id="d2" style="width: 400px;height:400px;position:absolute;left:100;top:100;background-color: red;"></div>
+</body>
+</html>

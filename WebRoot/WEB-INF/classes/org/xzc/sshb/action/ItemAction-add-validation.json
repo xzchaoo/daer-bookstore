@@ -1,0 +1,29 @@
+var config = {
+	'item' : {
+		required : {
+			msg : '请输入商品信息'
+		}
+	},
+	'item.name' : {
+		requiredstring : {
+			msg : "请输入商品名称",
+		}
+	},
+	'item.price' : {
+		double : {
+			minInclusive : 0,
+			msg : '价格必须大于等于0'
+		}
+	},
+	'item.remain' : {
+		int : {
+			minInclusive : 0,
+			msg : '库存必须大于等于0'
+		}
+	},
+	'img' : {
+		required : {
+			msg : "请选择商品的图片"
+		}
+	}
+}

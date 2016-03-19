@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.xzc.sshb.domain">
+	<class name="Record">
+		<cache usage="read-write" />
+		<id name="id" type="int">
+			<generator class="native" />
+		</id>
+
+		<many-to-one name="user" column="user_id" not-null="true" class="User" />
+		<set name="recordItems" inverse="true" order-by="id desc">
+			<key column="record_id" />
+			<one-to-many class="RecordItem" />
+		</set>
+		<property name="totalPrice" column="totalPrice" />
+		<property name="buyTime" update="false" insert="true" not-null="true" />
+		<property name="itemCount" />
+		<property name="evaluatedCount" />
+		<property name="description" />
+		<!--
+			<property name="evaluatedCount" column="evaluatedCount" insert="false" update="true"
+			formula="(select count(*) from recordItem as ri where ri.record_id=id and ri.star!=0)" />
+			<property name="itemCount" column="itemCount" insert="false" update="false"
+			formula="(select count(*) from recordItem as ri where ri.record_id=id)" />
+		-->
+
+		<many-to-one name="state" />
+		<one-to-one name="chargeback" constrained="false" fetch="select" cascade="all" lazy="proxy" />
+		<!-- 计算虚拟属性注意需要用()括起来!
+			<property name="totalPrice" type="double">
+			<formula>(select sum(ri.quantity*i.price) from recorditem as ri left join item as i on
+			ri.item_id=i.id where ri.record_id=id)</formula>
+			</property>
+		-->
+	</class>
+</hibernate-mapping>

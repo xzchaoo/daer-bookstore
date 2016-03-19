@@ -1,0 +1,176 @@
+<% var htmlHead={%>
+<title>更新商品 ${item.name}</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script>
+	$( function( ) {
+		$( '#updateForm' ).validate( {
+			rules : {
+				'item.name' : {
+					required : true,
+					minlength : 1,
+					maxlength : 50,
+				},
+				'item.price' : {
+					required : true,
+					number : true,
+					min : 0,
+					//max : 200000,
+				},
+				'item.remain' : {
+					required : true,
+					min : 0,
+					//max : 10000,
+					digits : true,
+				},
+				'item.shortDescription' : {},
+				'item.longDescription' : {}
+			},
+			messages : {
+				'item.name' : {
+					required : '请输入书名',
+					minlength : '书名的长度必须大于等于{0}',
+					maxlength : '书名的长度必须小于等于{0}',
+				},
+				'item.price' : {
+					required : '请输入价格',
+					number : '请输入一个非负数',
+					min : '价格必须大于等于{0}',
+					max : '价格必须小于等于{0}',
+				},
+				'item.remain' : {
+					required : '请输入库存量',
+					min : '剩余量必须大于等于{0}',
+					max : '剩余量必须小于等于{0}',
+					digits : '请输入一个非负整数',
+				},
+			}
+		} );
+		$( '#imgFile' )
+				.fileinput( {
+					//minFileCount : 1,
+					maxFileCount : 1,
+					showUpload : false,
+					initialPreviewShowDelete : true,
+					initialPreview : [ "<img src='${ctxPath}${item.imgPath}' class='file-preview-image' alt='Desert' title='Desert'>" ],
+				} );
+
+		$( '.img-wrapper' ).magnificPopup( {
+			type : 'image',
+			cursor : null,
+			titleSrc : "test222",
+			mainClass : 'mfp-with-zoom',
+			gallery : {
+				enabled : true,
+				navigateByImgClick : true,
+				arrowMarkup : '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
+				tPrev : '上一个', // title for left button
+				tNext : '下一个',
+				tCounter : '<span class="mfp-counter">第%curr%页,共%total%页</span>' // markup of cou
+			},
+			zoom : {
+				enabled : true,
+				duration : 500,
+				easing : 'ease-in-out',
+				opener : function( openerElement ) {
+					// openerElement is the element on which popup was initialized, in this case its <a> tag
+					// you don't need to add "opener" option if this code matches your needs, it's defailt one.
+					return openerElement.is( 'img' ) ? openerElement : openerElement.find( 'img' );
+				}
+			}
+		} );
+		$( '#category' ).val(${item.category.id}).chosen( {
+			disable_search_threshold : 3,
+		} );
+	} );
+</script>
+<%};%> <% var htmlBody={ %>
+
+<form id="updateForm" class="form-horizontal" action="${ctxPath}/item/update" method="post"
+	enctype="multipart/form-data">
+
+	<!-- ${params.fieldErrorsString!} -->
+	<div class="row">
+
+		<div class="col-xs-4">
+			<input type="hidden" name="item.id" value="${item.id}" />
+			<input type="hidden" name="item.imgPath" value="${item.imgPath}" />
+			<div class="form-group">
+				<label class="col-xs-3 control-label">名称</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.name" class="form-control" value="${item.name}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">作者</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.author" class="form-control" value="${item.author}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">类别</label>
+				<div class="col-xs-9">
+					<select id="category" class="form-control" name="item.category.id">
+						<%for(var c in categoryList){%>
+							<option value="${c.id}">${c.name}</option>
+						<%}%>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">页数</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.page" class="form-control" value="${item.page}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">价格</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.price" class="form-control" value="${item.price}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">库存</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.remain" class="form-control" value="${item.remain}" />
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">简单描述</label>
+				<div class="col-xs-9">
+					<input type="text" name="item.shortDescription" class="form-control" value="${item.shortDescription}" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-8">
+			<div class="form-group">
+				<label class="col-xs-1 control-label">图片</label>
+				<div class="col-xs-11">
+					<input id="imgFile" type="file" name="img" class="form-control" />
+				</div>
+
+			</div>
+		</div>
+		<div class="col-xs-12">
+
+			<div class="form-group">
+				<label class="col-xs-1 control-label">详细描述</label>
+				<div class="col-xs-11">
+					<textarea name="item.longDescription" class="form-control" rows="20" cols="20" style="resize:none">${item.longDescription}</textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<button type="submit" class="btn btn-success btn-block">提交</button>
+			</div>
+		</div>
+
+	</div>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+

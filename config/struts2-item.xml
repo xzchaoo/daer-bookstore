@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<package name="item" namespace="/item" extends="parent-config">
+		<default-class-ref class="org.xzc.sshb.action.ItemAction" />
+	</package>
+
+	<!-- 对于已经登陆过的用户 -->
+	<package name="item-login" extends="item" namespace="/item">
+		<default-interceptor-ref name="loginStack" />
+		<global-results>
+			<result name="listRecordUISuccess">/WEB-INF/html/item/listRecordUI.html</result>
+		</global-results>
+	</package>
+
+	<!-- 对于管理员 -->
+	<package name="item-admin" extends="item" namespace="/item">
+		<default-interceptor-ref name="adminStack" />
+		<global-results>
+			<result name="addSuccess" type="redirect">/item/viewDetailUI?item.id=${item.id}</result>
+			<result name="deleteSuccess" type="redirect">/item/listUI</result>
+			<result name="updateSuccess" type="redirect">/item/viewDetailUI?item.id=${item.id}</result>
+			<result name="addUISuccess">/WEB-INF/html/item/addUI.html</result>
+			<result name="updateUISuccess">/WEB-INF/html/item/updateUI.html</result>
+			<result name="addInput" type="redirect">
+				<param name="location">/item/addUI</param>
+				<param name="fieldErrorsString">${#ai.fieldErrorsString}</param>
+			</result>
+			
+			<result name="updateInput" type="redirect">
+				<param name="location">/item/updateUI?item.id=${item.id}</param>
+				<param name="fieldErrorsString">${#ai.fieldErrorsString}</param>
+			</result>
+			<result name="addInput" type="redirect">
+				<param name="location">/item/addUI</param>
+				<param name="fieldErrorsString">${#ai.fieldErrorsString}</param>
+			</result>
+		</global-results>
+		<action name="add" method="add">
+			<interceptor-ref name="adminStack">
+				<param name="fileUpload.allowedTypes">image/*</param>
+				<param name="fileUpload.allowedExtensions">jpg,jpeg,png</param>
+				<param name="fileUpload.maximumSize">2097152</param>
+			</interceptor-ref>
+		</action>
+
+		<action name="addUI" method="addUI" />
+		<action name="update" method="update">
+			<interceptor-ref name="adminStack">
+				<param name="fileUpload.allowedTypes">image/*</param>
+				<param name="fileUpload.maximumSize">1048576</param>
+			</interceptor-ref>
+		</action>
+		<action name="updateUI" method="updateUI" />
+	</package>
+
+
+	<!-- 所有人都可以执行的动作 -->
+	<package name="item-public" extends="item" namespace="/item">
+		<default-interceptor-ref name="myDefaultStack" />
+		<global-results>
+			<result name="rankUISuccess">/WEB-INF/html/item/rankUI.html</result>
+			<result name="listUISuccess">/WEB-INF/html/item/listUI.html</result>
+			<result name="viewDetailUISuccess">/WEB-INF/html/item/viewDetailUI.html</result>
+			<result name="viewDetailDescriptionUISuccess">/WEB-INF/html/item/viewDetailDescription.html</result>
+			<result name="viewDetailEvaluationUISuccess">/WEB-INF/html/item/viewDetailEvaluation.html</result>
+			<result name="viewDetailSalesVolumeUISuccess">/WEB-INF/html/item/viewDetailSalesVolume.html</result>
+		</global-results>
+		<action name="rankUI" method="rankUI" />
+		<action name="listUI" method="listUI" />
+		<action name="viewDetailUI" method="viewDetailUI" />
+		<action name="viewDetailDescriptionUI" method="viewDetailDescriptionUI" />
+		<action name="viewDetailEvaluationUI" method="viewDetailEvaluationUI" />
+		<action name="viewDetailEvaluationUI2" method="viewDetailEvaluationUI" />
+		<action name="viewDetailSalesVolumeUI" method="viewDetailSalesVolumeUI" />
+	</package>
+
+</struts>

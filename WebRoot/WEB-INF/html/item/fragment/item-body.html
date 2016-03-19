@@ -1,0 +1,43 @@
+<!-- 需要item  -->
+<div class="row" style="margin-top: 10px;">
+	<div class="col-xs-12">
+		<nav id="nav-middle" class="navbar navbar-default">
+			<ul class="nav navbar-nav nav-tabs">
+				<li class="">
+					<a id="description" href="javascript:void(0)" data-toggle="tab">书本描述</a>
+				</li>
+				<li class="">
+					<a id="evaluation" href="javascript:void(0)" data-toggle="tab">评价情况</a>
+				</li>
+				<li class="">
+					<a id="salesVolume" href="javascript:void(0)" data-toggle="tab">销量情况</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div id="ctnt" class="tab-content"></div>
+	</div>
+</div>
+<script>
+	var cp = {
+		itemId : ${item.id},
+		rows : ${rows},
+	};
+	$( function( ) {
+		var urlMapping = {
+			description : "${ctxPath}/item/viewDetailDescriptionUI",
+			evaluation : "${ctxPath}/item/viewDetailEvaluationUI",
+			salesVolume : "${ctxPath}/item/viewDetailSalesVolumeUI",
+		};
+		var $ctnt = $( '#ctnt' );
+		$( '#nav-middle a' ).click( function( ) {
+			$ctnt.load( urlMapping[$( this ).attr( 'id' )] , {
+				'item.id' : ${item.id},
+				rows : cp.rows,
+			} );
+		} ).first( ).click( );
+	} );
+</script>

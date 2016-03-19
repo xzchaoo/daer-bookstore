@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<!-- 用于导航一些公共的页面 -->
+	<package name="public" namespace="/" extends="parent-config">
+		<default-interceptor-ref name="myDefaultStack" />
+		<default-action-ref name="index" />
+		<default-class-ref class="org.xzc.sshb.action.PublicAction" />
+		<global-results>
+			<result name="indexSuccess">/WEB-INF/html/index.html</result>
+			<result name="msgSuccess">/WEB-INF/html/msg.html</result>
+			<result name="preferenceUISuccess">/WEB-INF/html/preference/preferenceUI.html</result>
+			<result name="messageUISuccess">/WEB-INF/html/message/messageUI.html</result>
+		</global-results>
+
+		<action name="index" method="index" />
+		<action name="msg" method="msg" />
+		<action name="preferenceUI" method="preferenceUI" />
+		<action name="messageUI" method="messageUI" />
+		<action name="statisticsUI" method="statisticsUI">
+			<result name="statisticsUISuccess">/WEB-INF/html/statistics/statistics.html</result>
+		</action>
+		<action name="statisticsQuery" method="statisticsQuery">
+			<result name="statisticsQuerySuccess">/WEB-INF/html/statistics/statisticsQueryUI.html</result>
+		</action>
+	</package>
+
+</struts>

@@ -1,0 +1,112 @@
+<% var htmlHead={%>
+<title>统计</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script src="${ctxPath}/js/my/public/datepicker.js"></script>
+<script type="text/javascript">
+	$(function() {
+		xzc.setSecondNav([ {
+			name : "统计"
+		} ]);
+		$('#category').chosen();
+		xzc.datepicker('#beginTime', {});
+		xzc.datepicker('#endTime', {});
+	});
+</script>
+<%};%> <% var htmlBody={%>
+
+
+<!-- 关掉 container -->
+</div>
+
+
+
+<div class="text-center">
+	<h1>统计种种Top 3</h1>
+</div>
+<div class="panel" style="background-color: #EFC2E0; border-radius: 0; margin-bottom: 0;">
+	<div class="panel-heading">
+		财富排行榜<span class="badge">Top 3 壕</span> <a class="close" data-toggle="collapse" data-target="#c1">&times;</a>
+	</div>
+	<div class="panel-collapse in collapse" id="c1">
+		<div class="container">
+			<div class="panel-body">
+				<%for(var u in caifu){%>
+				<h1>
+					${u.name} <small>${u.money,numberFormat='##.##'}元</small>
+				</h1>
+				<%}%>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel" style="background-color: #E698C8; border-radius: 0; margin-bottom: 0;">
+	<div class="panel-heading">
+		花钱排行榜<span class="badge">Top 3 壕</span> <a class="close" data-toggle="collapse" data-target="#c2">&times;</a>
+	</div>
+	<div class="panel-collapse in collapse" id="c2">
+		<div class="container">
+			<div class="panel-body">
+				<%for(var i in huaqian){%>
+				<h1>
+					${i.user.name} <small>${i.total}元</small>
+				</h1>
+				<%}%>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel" style="background-color: #DC6FB2; border-radius: 0; margin-bottom: 0;">
+	<div class="panel-heading">
+		最贵商品排行榜<span class="badge">Top 3 贵</span> <a class="close" data-toggle="collapse" data-target="#c3">&times;</a>
+	</div>
+	<div class="panel-collapse in collapse" id="c3">
+		<div class="container">
+			<div class="panel-body">
+				<%for(var i in zuigui){%>
+				<h1>
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">${i.name}</a> <small>${i.price}元</small>
+				</h1>
+				<%}%>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel" style="background-color: #D2469D; border-radius: 0; margin-bottom: 0;">
+	<div class="panel-heading">
+		最畅销商品排行榜<span class="badge">Top 3 热</span> <a class="close" data-toggle="collapse" data-target="#c4">&times;</a>
+	</div>
+	<div class="panel-collapse in collapse" id="c4">
+		<div class="container">
+			<div class="panel-body">
+				<%for(var i in changxiao){%>
+				<h1>
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${i.item.id}">${i.item.name}</a> <small>${i.quantity}件</small>
+				</h1>
+				<%}%>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel" style="color: #ffffff; background-color: #000000; border-radius: 0; margin-bottom: 0;">
+	<div class="panel-heading">
+		最劲爆通知排行榜<span class="badge">Top 3 爆</span>
+	</div>
+	<div class="panel-collapse in collapse" id="c4">
+		<div class="container">
+			<div class="panel-body">
+				<h1 style="color: #000000">右上角可以领取免费充值卡,您知道吗?<small style="color:#000000;">一般人我不告诉他.</small></h1>
+				<h1 style="color: #000000">联系管理员可以获得更多余额,您知道吗?<small style="color:#000000;">一般人我不告诉他.</small></h1>
+				<h1 style="color: #000000;">近期将推出免费的商品,您知道吗?<small style="color:#000000;">一般人我不告诉他.</small></h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

@@ -1,0 +1,21 @@
+var config = {
+	'user.name' : {
+		requiredstring : {
+			msg : "请输入用户名称",
+		},
+		regex : {
+			regex : 'xzc\\d+',
+			msg : '用户名必须以xzc开头,并且其余全是数字',
+		}
+	},
+	'user.password' : {
+		requiredstring : {
+			msg : '请输入用户密码',
+		},
+		stringlength : {
+			minLength : 6,
+			maxLength : 20,
+			msg : '用户密码长度必须大于等于${minLength}小于等于${maxLength}'
+		}
+	}
+}

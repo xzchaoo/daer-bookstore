@@ -1,0 +1,16 @@
+<% var htmlHead={%>
+<title>登陆</title>
+<style>
+</style>
+<%};%> <% var htmlBody={ %>
+
+<form action="user_login" method="post">
+	账号:
+	<input name="user.name" />
+	<br /> 密码:
+	<input name="user.password" />
+	<br />
+	<button type="submit">提交</button>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+

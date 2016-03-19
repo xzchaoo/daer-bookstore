@@ -1,0 +1,88 @@
+<%/*
+	record 要显示的订单
+	detail 是否显示 "详情" 按钮 如果不给出 默认就是显示
+	showEvaluatedCount 是否要显示 " , 0项已经评价完毕." 这个信息,  默认是true
+*/%>
+
+<%
+	/*
+		根据订单的类型确定panel颜色,
+		目前没有更好的办法来处理不同的颜色的选择问题,因为你的逻辑不能写死在后端,
+		所以只能写在前端,而前端就是这么丑!
+	*/
+	var panelColor="panel-default";
+	select(record.state.id){
+		case ai.state.RECORD_PAID:
+			panelColor="panel-primary";
+		case ai.state.RECORD_SENT:
+			panelColor="panel-info";
+		case ai.state.RECORD_RECEIVED:
+			panelColor="panel-info";
+		case ai.state.RECORD_FINISHED:
+			panelColor="panel-success";
+		case ai.state.RECORD_CANCELED:
+			panelColor="panel-danger";
+		case ai.state.RECORD_DELETED:
+			panelColor="panel-danger";
+	}
+%>
+
+<div class="panel ${panelColor}">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			订单编号:<a href="${ctxPath}/record/viewDetailUI?record.id=${record.id}">${record.id}</a>
+			日期: ${record.buyTime,dateFormat='yyyy-MM-dd'}
+			状态:<span style="color:red;">${record.state}</span>
+			总价: ${record.totalPrice,numberFormat='##.##'} 共有${record.itemCount}项商品
+			<%if(showEvaluatedCount!true){%>
+				,${record.evaluatedCount}项已经评价完毕.
+			<%}%>
+			
+			<%if(detail!true){%>
+			<a class="pull-right btn btn-warning" style="margin-top:-8px;"
+				href="${ctxPath}/record/viewDetailUI?record.id=${record.id}">详情</a> 
+			<%}%>
+			
+			<%
+				var sid=record.state.id;
+				if(sid==ai.state.RECORD_PAID){%>
+					<a class="pull-right btn btn-warning" href="${ctxPath}/record/cancelUI?record.id=${record.id}" style="margin-top:-8px;color:#fff;" data-id="${record.id}">取消订单</a>
+				<%}else if(sid==ai.state.RECORD_SENT){%>
+					<a  class="receive-record pull-right btn btn-primary" href="${ctxPath}/record/receive?record.id=${record.id}" style="margin-top:-8px;color:#fff;" data-id="${record.id}">确认收货</a>
+				<%}else if(sid==ai.state.RECORD_RECEIVED){%>
+					<a class="pull-right btn btn-info" href="javascript:void(0)" style="margin-top:-8px;color:#fff;" data-id="${record.id}">已收货</a>
+				<%}else if(sid==ai.state.RECORD_FINISHED){%>
+					<a class="pull-right btn btn-success" href="javascript:void(0)" style="margin-top:-8px;color:#fff;" data-id="${record.id}">交易完成,评价完成</a>
+					<a class="pull-right btn btn-danger deleteRecord" href="javascript:void(0)" style="margin-top:-8px;color:#fff;" data-id="${record.id}">删除订单</a>
+				<%}else if(sid==ai.state.RECORD_CANCELED){%>
+					<a class="pull-right btn btn-danger" href="javascript:void(0)" style="margin-top:-8px;color:#fff;" data-id="${record.id}">订单被取消</a>
+				<%}else if(sid==ai.state.RECORD_DELETED){%>
+					<a class="pull-right btn btn-danger" href="javascript:void(0)" style="margin-top:-8px;color:#ffffff;" data-id="${record.id}">订单被删除</a>
+				<%}%>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-bordered table-hover table-responsive">
+			<%
+				for(var ri in record.recordItems){
+				var ed=ri.star!=0;
+				%>					<tr>
+				<td class="record-img vlm">
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${ri.item.id}">
+						<img src="${ctxPath}${ri.item.imgPath}" class="img-responsive img-thumbnail td-img" />
+					</a>
+				</td>
+				<td class="record-name">
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${ri.item.id}">${ri.item.name}</a>
+				</td>
+				<td class="record-price text-center">${ri.item.price}</td>
+				<td class="record-quantity text-center">${ri.quantity}</td>
+				<td class="record-desc">${ri.item.shortDescription}</td>
+				<td class="record-operation">
+					<a href="${ctxPath}/recordItem/evaluateUI?recordItem.id=${ri.id}" class="btn btn-primary">${ri.state}</a>
+				</td>
+			</tr>
+			<%}%>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+<% var htmlHead={%>
+<title>消息</title>
+<script>
+	
+</script>
+<%};%> <% var htmlBody={ %> <%if(!isEmpty(params.fieldErrorsString)) print(params.fieldErrorsString); %>
+还没实现哦...
+<div class="media">
+   <a class="pull-left" href="#">
+      <img class="media-object" src="/wp-content/uploads/2014/06/64.jpg" 
+      alt="媒体对象">
+   </a>
+   <div class="media-body">
+      <h4 class="media-heading">媒体标题</h4>
+      这是一些示例文本。这是一些示例文本。 
+      这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+   </div>
+</div>
+<div class="media">
+   <a class="pull-left" href="#">
+      <img class="media-object" src="/wp-content/uploads/2014/06/64.jpg" 
+      alt="媒体对象">
+   </a>
+   <div class="media-body">
+      <h4 class="media-heading">媒体标题</h4>
+      这是一些示例文本。这是一些示例文本。 
+      这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+	  这是一些示例文本。这是一些示例文本。
+      <div class="media">
+         <a class="pull-left" href="#">
+            <img class="media-object" src="/wp-content/uploads/2014/06/64.jpg" 
+            alt="媒体对象">
+         </a>
+         <div class="media-body">
+            <h4 class="media-heading">媒体标题</h4>
+            这是一些示例文本。这是一些示例文本。
+            这是一些示例文本。这是一些示例文本。
+            这是一些示例文本。这是一些示例文本。 
+            这是一些示例文本。这是一些示例文本。
+			这是一些示例文本。这是一些示例文本。
+         </div>
+      </div>
+   </div>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+

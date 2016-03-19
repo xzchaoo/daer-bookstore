@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<package name="paycard" namespace="/paycard" extends="parent-config">
+		<default-interceptor-ref name="loginStack" />
+		<default-class-ref class="org.xzc.sshb.action.PayCardAction" />
+		<action name="listUI" method="listUI">
+			<result name="success">/WEB-INF/html/paycard/listUI.html</result>
+		</action>
+		<action name="chongzhiUI">
+			<result>/WEB-INF/html/paycard/chongzhiUI.html</result>
+		</action>
+		<action name="addUI">
+			<interceptor-ref name="adminStack" />
+			<result name="success">/WEB-INF/html/paycard/addUI.html</result>
+		</action>
+		<action name="add" method="add">
+			<interceptor-ref name="adminStack" />
+			<result name="success">/WEB-INF/html/paycard/addUI.html</result>
+			<result name="input">/WEB-INF/html/paycard/addUI.html</result>
+			<result name="vc" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">验证码错误</param>
+			</result>
+		</action>
+
+
+		<!-- 处理充值提交 -->
+		<action name="chongzhi" class="org.xzc.sshb.action.PayCardAction" method="chongzhi">
+			<result name="success" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">成功</param>
+			</result>
+			<result name="invalid" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">无效的充值卡</param>
+			</result>
+			<result name="used" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">充值卡已经被用过了</param>
+			</result>
+		</action>
+
+	</package>
+
+</struts>

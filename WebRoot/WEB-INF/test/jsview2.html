@@ -1,0 +1,49 @@
+<% var htmlHead={%>
+<title>文件上传测试</title>
+
+<script id="t1" type="text/x-jsrender">
+	<button id="add" class="btn btn-success">add</button>
+	<button id="remove" class="btn btn-default">add</button><br/>
+	当前选中的id={^{:sid}}<br/>
+	<select data-link='sid'>
+	{^{for users}}	
+		<option data-link="{:name} value{:id} selected{:id === ~root.sid}"></option>
+	{{/for}}
+	</select>
+    <label>Name:<input data-link="{:selected()^name trigger=true:} disabled{:sid == 0}" /></label>
+    <label>age:<input data-link="{:selected()^age trigger=true:} disabled{:sid == 0}" /></label>
+</script>
+
+<script type="text/javascript" src="${ctxPath}/js/jsviews.js"></script>
+
+<script type="text/javascript">
+	$( function( ) {
+		var t1 = $.templates( '#t1' );
+		var users = [
+				{
+					id : 1,
+					name : 'xzc1',
+					age : 21
+				},
+				{
+					id : 2,
+					name : 'xzc2',
+					age : 22
+				} ];
+		var root = {
+			sid : -1,
+			selected : function( ) {
+				for (var i = 0; i < users.length; ++i) {
+					if ( users[i].id == this.sid )
+						return users[i];
+					return {};
+				}
+			},
+			users : users,
+		};
+		t1.link( '#ddd' , root );
+	} );
+</script>
+<%};%> <% var htmlBody={ %>
+<div id="ddd"></div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

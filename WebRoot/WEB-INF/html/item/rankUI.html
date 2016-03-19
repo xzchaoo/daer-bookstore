@@ -1,0 +1,201 @@
+<% var htmlHead={%>
+<title>销量排行Top10, ${ai.name}</title>
+
+<link href="${ctxPath}/css/my/item/rankUI.css" rel="stylesheet" >
+<script src="${ctxPath}/js/my/template/template.js"></script>
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [ {
+			name : '销量排行',
+			url : '',
+		} ] );
+	} );
+	q = {
+		rows : ${rows},
+		page : ${page},
+		total : ${total},
+		keyword : '${keyword!}',
+	};
+</script>
+
+
+<script type="text/javascript" src="${ctxPath}/js/highcharts.js"></script>
+<script type="text/javascript" src="${ctxPath}/js/highcharts-3d.js"></script>
+
+<script>
+	$( function( ) {
+		/*
+		 $( '#container' ).highcharts( {
+		 chart : {
+		 type : 'column',
+		 margin : [
+		 50,
+		 50,
+		 100,
+		 80 ]
+		 },
+		 title : {
+		 text : '当天销量柱形图'
+		 },
+		 xAxis : {
+		 categories : ${monthRankItemNamesString},
+		 labels : {
+		 rotation : -45,
+		 align : 'right',
+		 style : {
+		 fontSize : '13px',
+		 fontFamily : 'Verdana, sans-serif'
+		 }
+		 }
+		 },
+		 yAxis : {
+		 min : 0,
+		 title : {
+		 text : '当天销量'
+		 }
+		 },
+		 legend : {
+		 enabled : false
+		 },
+		 tooltip : {
+		 pointFormat : '销量: <b>{point.y:.1f}</b>',
+		 },
+		 series : [ {
+		 name : '销量',
+		 data : ${monthRankItemQuantitiesString},
+		 dataLabels : {
+		 enabled : true,
+		 rotation : 0,
+		 color : '#000',
+		 align : 'right',
+		 x : 4,
+		 y : 0,
+		 style : {
+		 fontSize : '13px',
+		 fontFamily : 'Verdana, sans-serif',
+		 textShadow : '0 0 1px black'
+		 }
+		 }
+		 } ]
+		 } );
+		 */
+		$( function( ) {
+			// Set up the chart
+			var chart = new Highcharts.Chart( {
+				chart : {
+					renderTo : 'container',
+					type : 'column',
+					margin : 75,
+					options3d : {
+						enabled : true,
+						alpha : 15,
+						beta : 15,
+						depth : 50,
+						viewDistance : 25
+					}
+				},
+				title : {
+					text : '本月销量排行Top10'
+				},
+				subtitle : {
+					text : '更新于${lastUpdateSaleRankDate,dateFormat="yyyy-MM-dd HH:mm:ss"},买买买'
+				},
+				plotOptions : {
+					column : {
+						depth : 25
+					}
+				},
+				xAxis : {
+					categories : ${monthRankItemNamesString}
+				},
+				yAxis : {
+					opposite : true,
+				},
+				series : [ {
+					data : ${monthRankItemQuantitiesString},
+					dataLabels : {
+						enabled : true,
+						rotation : 0,
+						color : '#000',
+						align : 'right',
+						x : 4,
+						y : 0,
+						style : {
+							fontSize : '13px',
+							fontFamily : 'Verdana, sans-serif',
+							textShadow : '0 0 1px black'
+						}
+					}
+				} ]
+			} );
+
+			// Activate the sliders
+			$( '#R0' ).on( 'change' , function( ) {
+				chart.options.chart.options3d.alpha = this.value;
+				showValues( );
+				chart.redraw( false );
+			} );
+			$( '#R1' ).on( 'change' , function( ) {
+				chart.options.chart.options3d.beta = this.value;
+				showValues( );
+				chart.redraw( false );
+			} );
+
+			function showValues( ) {
+				$( '#R0-value' ).html( chart.options.chart.options3d.alpha );
+				$( '#R1-value' ).html( chart.options.chart.options3d.beta );
+			}
+			showValues( );
+		} );
+
+	} );
+</script>
+
+<%};%> <% var htmlBody={ %>
+
+
+<div id="container" style="min-width:700px;height:400px"></div>
+
+<div class="row">
+	<%for(var ri in monthRankItems){ var i=ri.item; %>
+		<div class="col-xs-4">
+			<div class="rankUI-item">
+				<div class="rankUI-item-img">
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">
+						<img src="${ctxPath}${i.imgPath}" class="">
+					</a>
+				</div>
+				<div class="rankUI-item-name">${i.name}</div>
+				<div class="rankUI-item-quantity">本月销量:${ri.quantity}</div>
+				<div class="rankUI-item-description">${i.shortDescription}</div>
+			</div>
+		</div>
+		<%if(riLP.index % 3==0){%>
+			</div>
+			<div class="row">
+		<%}%>
+	<%}%>
+</div>
+
+
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+<%/*
+<div class="row">
+	<%for(var ri in monthRankItems){ var i=ri.item; %>
+	<div class="rank-row">
+		<div class="col-xs-3">
+			<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">
+				<img src="${ctxPath}${i.imgPath}" class="img-responsive img-thumbnail">
+			</a>
+		</div>
+		<div class="col-xs-4">
+			<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">${i.name}</a>
+		</div>
+		<div class="col-xs-1 text-center">${ri.quantity}</div>
+		<div class="col-xs-4">${i.shortDescription}</div>
+		<div class="clearfix"></div>
+	</div>
+	<%}%>
+</div>
+*/%>

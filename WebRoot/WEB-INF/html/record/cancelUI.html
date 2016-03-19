@@ -1,0 +1,41 @@
+<% var htmlHead={%>
+<title>申请取消订单</title>
+<script>
+	$( function( ) {
+		xzc.validate( $( '#cancelForm' ) , {
+			rules : {
+				'reason' : {
+					required : true,
+					minlength : 10,
+				}
+			},
+			messages : {
+				'reason' : {
+					required : "请说明取消理由,字数不少于10",
+					minlength : "字数不少于10",
+				}
+			}
+		} );
+	} );
+</script>
+<%};%> <% var htmlBody={ %>
+<div class="row">
+	<div class="col-xs-12"><%include('/WEB-INF/html/record/fragment/record.html'){}%></div>
+	<div class="col-xs-12">
+		<form id="cancelForm" action="${ctxPath}/record/cancel" method="post" class="form-horizontal">
+			<input type="hidden" name="record.id" value="${record.id}" />
+			<div class="form-group">
+				<label class="control-label col-xs-1">理由</label>
+				<div class="col-xs-11">
+					<textarea name="reason" rows="10" cols="0" class="form-control" style="resize:none;"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-xs-12">
+					<button type="submit" class="btn btn-primary btn-block">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

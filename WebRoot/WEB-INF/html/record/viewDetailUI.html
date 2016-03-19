@@ -1,0 +1,111 @@
+<% var htmlHead={%>
+<title>订单详情</title>
+<script type="text/javascript" src="${ctxPath}/js/jsviews.js"></script>
+
+<%};%> <% var htmlBody={ %>
+
+<div class="row">
+	<div class="col-xs-12">
+		<%include('/WEB-INF/html/record/fragment/record.html',{detail:false,showEvaluatedCount:false}){}%>
+		<script>
+			<%/*include('/js/my/record/listUI.js'){}*/%>
+			<%include('/js/my/record/fragment/initRecord.js'){}%>
+		</script>
+	</div>
+</div>
+
+<div class="row">
+	<%if(record.state.id==ai.state.RECORD_CANCELED){%>
+	<div class="col-xs-12">
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<div class="panel-title">您已于 ${record.chargeback.time!}取消了该订单</div>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="control-label col-xs-1">理由</label>
+					<div class="col-xs-11">
+						<p class="lead">${record.chargeback.reason!}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%}%>
+</div>
+<div class="row">
+	
+	<div class="col-xs-12">
+		<%if(ai.admin){%>
+		<a class="btn btn-info"
+			href="${ctxPath}/record/setRecordState?record.id=${record.id}&record.state.id=${ai.state.RECORD_PAID}">[买家已付款]</a>
+		<a class="btn btn-info"
+			href="${ctxPath}/record/setRecordState?record.id=${record.id}&record.state.id=${ai.state.RECORD_SENT}">[卖家已发货]</a>
+		<a class="btn btn-info"
+			href="${ctxPath}/record/setRecordState?record.id=${record.id}&record.state.id=${ai.state.RECORD_RECEIVED}">[买家已收货]</a>
+		<a class="btn btn-info"
+			href="${ctxPath}/record/setRecordState?record.id=${record.id}&record.state.id=${ai.state.RECORD_FINISHED}">[交易完成]</a>
+		<a class="btn btn-info"
+			href="${ctxPath}/record/setRecordState?record.id=${record.id}&record.state.id=${ai.state.RECORD_CANCELED}">[订单被取消]</a>
+		<%}%>
+	</div>
+	
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%/*%>
+<div class="panel panel-success">
+	<div class="panel-heading">
+		<h3 class="panel-title">订单编号: ${record.id} 日期: ${record.buyTime,dateFormat='yyyy-MM-dd'} 总价: ${record.totalPrice}
+			共有${record.itemCount}项商品 , ${record.evaluatedCount}项已经评价完毕.</h3>
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-bordered table-hover table-responsive">
+			<%for(var ri in record.recordItems){ var ed=ri.star!=0; var oc=ed?'btn-success':'btn-warning'; var txt=ed?'已评':'评价';
+			%>
+			<tr>
+				<td class="td-img">
+					<img src="${ctxPath}${ri.item.imgPath}" class="img-responsive" />
+				</td>
+				<td class="td-name">
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${ri.item.id}">${ri.item.name}</a>
+				</td>
+				<td class="td-price">${ri.item.price}</td>
+				<td class="td-quantity">${ri.quantity}</td>
+				<td class="td-desc">${ri.item.shortDescription}</td>
+				<td class="td-operation">
+					<a href="${ctxPath}/recordItem/evaluateUI?recordItem.id=${ri.id}" class="btn ${oc}">${txt}</a>
+				</td>
+			</tr>
+			<%}%>
+		</table>
+	</div>
+</div>
+<%*/%>

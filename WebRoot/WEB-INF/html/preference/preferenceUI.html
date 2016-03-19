@@ -1,0 +1,57 @@
+<% var htmlHead={%>
+<title>设置你的偏好</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script>
+	$( function( ) {
+		$( '#defaultRecordType option' ).each( function( ) {
+			if ( $( this ).val( ) == ${ai.pre.defaultRecordType} ) {
+				$( this ).prop( 'selected' , true );
+				//要注意一下顺序问题 如果放在chosen后 就可以不用trigger
+				//否则要trigger一下
+				//$( this ).parent( ).trigger( "chosen:updated" );
+			}
+		} ).parent( ).chosen( {
+			disable_search_threshold : 10,
+		} );
+	} );
+</script>
+<%};%> <% var htmlBody={ %> <%if(!isEmpty(params.fieldErrorsString)) print(params.fieldErrorsString); %>
+<form class="form-horizontal" method="post" action="${_absurl}">
+	<div class="row">
+		<div class="col-xs-12">
+
+			<div class="form-group">
+				<label class="control-label col-xs-2">每页显示的记录数量</label>
+				<div class="col-xs-2">
+					<input type="text" class="form-control" name="rows" value="${ai.pre.rows}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-xs-2">显示订单默认类型</label>
+				<div class="col-xs-2">
+					<select id="defaultRecordType" name="defaultRecordType" class="form-control">
+						<option value="0">全部</option>
+						<option value="300">已付款</option>
+						<option value="301">已发货</option>
+						<option value="302">已收货</option>
+						<option value="303">已完成</option>
+						<option value="304">已取消</option>
+						<option value="399">已删除</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-12">
+				<div class="form-group">
+
+					<button type="submit" class="btn btn-primary">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+

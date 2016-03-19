@@ -1,0 +1,30 @@
+<% var htmlHead={%>
+<title>管理员编辑用户</title>
+<style>
+</style>
+<%};%> <% var htmlBody={ %>
+<form action="${ctxPath}/user/updateByAdmin" method="post">
+	<input type="hidden" name="user.id" value="${user.id}" />
+	账号:
+	<input name="user.name" value="${user.name}" />
+	<br /> 密码:
+	<input name="user.password" value="${user.password}" />
+	<br /> 年龄:
+	<input name="user.birthday" value="${user.birthday}" type="date" />
+	<br /> 性别:
+	<input name="user.sex" value="${user.sex}" />
+	<br /> 邮箱:
+	<input name="user.email" value="${user.email}" />
+	<br /> 地址:
+	<input name="user.address" value="${user.address}" />
+	<br /> 余额:
+	<input name="user.money" value="${user.money}" />
+	<br />状态
+	<input name="user.state.id" value="${user.state.id}" />
+	<br />
+	<button type="submit">提交</button>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+
+

@@ -1,0 +1,176 @@
+<% var htmlHead={%>
+<title>评价商品</title>
+
+<script type="text/javascript">
+	$( function( ) {
+		xzc.setSecondNav( [
+				{
+					name : "订单",
+					url : "${ctxPath}/record/viewDetailUI?record.id=${recordItem.record.id}"
+				},
+				{
+					name : "评价商品",
+					url : '',
+				} ] );
+		$( '#evaluateRecordItemForm' ).validate( {
+			rules : {
+				'recordItem.evaluation' : {},
+				'recordItem.star' : {
+					required : true,
+					min : 1,
+					max : 5,
+					digits : true,
+				},
+			},
+			messages : {
+				'recordItem.evaluation' : {},
+				'recordItem.star' : {
+					required : '请打分',
+					min : '分数必须大于等于{0}',
+					max : '分数必须小于等于{0}',
+					digits : '分数必须是正整数',
+				}
+			},
+			highlight : function( element , errorClass ) {
+				$( element ).addClass( errorClass ).closest( '.form-group' ).removeClass( 'has-success' )
+						.addClass( 'has-error' );
+			},
+			success : function( label ) {
+				$( label ).closest( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-error' );
+				$( '#submit' ).removeClass( 'disabled' );
+			},
+			errorPlacement : function( error , element ) {
+				error.addClass( 'control-label' ).appendTo( $( '#errorPlacement' ).html( '' ) );
+			}
+		} );
+
+	} );
+</script>
+<%};%> <% var htmlBody={ var item=recordItem.item; %>
+<%include('/WEB-INF/html/item/fragment/item-head.html',{item:item,admin:true,buy:false}){}%> <%/*
+<div class="row">
+	<div class="col-xs-3" style="height:200px;text-align: center;">
+		<img alt="" src="${ctxPath}${item.imgPath}" class="img-thumbnail img-responsive" style="height: 200px;" />
+	</div>
+	<div class="col-xs-9" style="height: 200px;">
+		<div class="well" style="height: 200px;">
+			<form class="form-horizontal">
+				<input type="hidden" name="item.id" value="${item.id}" />
+				<div class="form-group">
+					<label class="col-xs-2 control-label">名称</label>
+					<div class="col-xs-8">
+						<label class="form-control-static">
+							<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}">sdf${item.name}</a>
+							</label>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 control-label">价格</label>
+					<div class="col-xs-8">
+						<label class="form-control-static">${item.price}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">简短描述</label>
+					<div class="col-xs-8">
+						<label class="form-control-static">${item.shortDescription}</label>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+*/%> <%if(ai.admin){%> <%/*debug用*/%>
+<a
+	href="${ctxPath}/recordItem/setRecordItemState?recordItem.id=${recordItem.id}&recordItem.state.id=${ai.state.RECORDITEM_NOT_RECEIVED}"
+	class="btn btn-success">设置为[未收货]</a>
+<a
+	href="${ctxPath}/recordItem/setRecordItemState?recordItem.id=${recordItem.id}&recordItem.state.id=${ai.state.RECORDITEM_RECEIVED}"
+	class="btn btn-success">设置为[已收货]</a>
+<a
+	href="${ctxPath}/recordItem/setRecordItemState?recordItem.id=${recordItem.id}&recordItem.state.id=${ai.state.RECORDITEM_EVALUATED}"
+	class="btn btn-success">设置为[已评价]</a>
+<a
+	href="${ctxPath}/recordItem/setRecordItemState?recordItem.id=${recordItem.id}&recordItem.state.id=${ai.state.RECORDITEM_CANCELED}"
+	class="btn btn-success">设置为[被取消]</a>
+<%}%>
+<div class="row" style="margin-top: 15px;">
+	<div class="col-xs-12">
+		<% var ri=recordItem; var r=ri.record; var i=recordItem.item; %>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="col-xs-12">
+					<label class="label label-default" style="font-size:20px;display:  inline-block;">${ri.state}</label>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-2">订单编号</div>
+				<div class="col-xs-1">
+					<a href="${ctxPath}/record/viewDetailUI?record.id=${recordItem.record.id}">${recordItem.record.id}</a>
+				</div>
+				<div class="col-xs-2">商品编号</div>
+				<div class="col-xs-1">
+					<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}">${item.id}</a>
+				</div>
+				<div class="col-xs-2">购买时间</div>
+				<div class="col-xs-4">${r.buyTime,dateFormat='yyyy-MM-dd hh:mm:ss'}</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-2">打分</div>
+				<div class="col-xs-1">${ri.star}</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+
+	<!-- 还没发货 -->
+	<%if(ri.state.id==ai.state.RECORDITEM_NOT_RECEIVED){%>
+	<div class="col-xs-12">还没发货</div>
+	<!-- 收到货了 -->
+	<%}else if(ri.state.id==ai.state.RECORDITEM_RECEIVED){%>
+	<div class="col-xs-10">
+		<form id="evaluateRecordItemForm" action="${ctxPath}/recordItem/evaluate" method="post" class="form-horizontal">
+			<input type="hidden" name="recordItem.id" value="${ri.id}" />
+			<div class="form-group">
+				<label class="col-xs-2 control-label">评语</label>
+				<div class="col-xs-10">
+					<textarea name="recordItem.evaluation" class="form-control" rows="20" cols="20" style="resize:none;"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label">打分(1-5)</label>
+				<div class="col-xs-1">
+					<input type="text" name="recordItem.star" class="form-control" value="0" />
+				</div>
+				<div id="errorPlacement" class="col-xs-8"></div>
+				<div class="col-xs-1">
+					<button id="submit" type="submit" class="btn btn-success disabled">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 已经评价了 -->
+	<%}else if(ri.state.id==ai.state.RECORDITEM_EVALUATED){%>
+	<div class="col-xs-12">
+		<div class="panel panel-info  ">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					评价
+					<a class="pull-right" href="javascript:void(0)" data-toggle="collapse" data-target='#p'>&times;</a>
+				</h3>
+			</div>
+			<div class="panel-collapse in" id="p">
+				<div class="panel-body">
+					<p class="lead">${recordItem.evaluation}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 订单被取消 -->
+	<%}else if(ri.state.id==ai.state.RECORDITEM_CANCELED){%>
+	<div class="col-xs-12">订单被取消</div>
+	<%}%>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

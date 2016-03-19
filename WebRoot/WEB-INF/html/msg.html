@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-store, must-revalidate">
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+<meta http-equiv="expires" content="0">
+
+
+<title>提示</title>
+<style type="text/css">
+#msg {
+	width: 1000px;
+	height: 200px;
+	margin-top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-left: auto;
+	border: 2px solid #FFD340;
+	position: relative;
+	line-height: 200px;
+	text-align: center;
+}
+</style>
+<!-- 重定向 
+<meta http-equiv="Refresh" content="5;url=${ctxPath}${params.url}">
+-->
+<script type="text/javascript">
+	window.onload = function( ) {
+		setTimeout( function( ) {
+			document.getElementById( 'a' ).click( );
+		} , 10000 );
+	};
+</script>
+</head>
+<body>
+	<div id="msg">
+		<% if(params.url!''!=''){%>
+		<a id='a' href='${ctxPath}${params.url}'>${params.msg!'...'}</a>
+		<%}else{%>
+		<a id='a' href='javascript:void(0)' onclick='history.back();'>${params.msg!'...'}</a>
+		<%} %>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.xzc.sshb.domain">
+	<class name="User">
+		<cache usage="read-write" />
+		<id name="id" type="int">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" length="50" not-null="true" unique="true" insert="true"
+			update="false" />
+		<property name="password" type="string" length="50" not-null="true" insert="true" update="false" />
+
+		<!-- 虚拟属性 -->
+		<property name="age" type="integer" insert="false" update="false"
+			formula="(datediff(curdate(),birthday) / 365)" />
+		<property name="birthday" type="date" not-null="true" />
+		<property name="sex" type="integer" />
+		<property name="email" type="string" not-null="true" />
+		<property name="money" type="double" />
+		<property name="address" type="string" length="50" />
+
+		<many-to-one name="state" column="state" not-null="true" />
+
+		<set name="records" inverse="true" order-by="id desc">
+			<key column="user_id" />
+			<one-to-many class="Record" />
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<!-- 基础设施... -->
+	<package name="parent-config" extends="struts-default" namespace="/" abstract="true">
+		<result-types>
+			<!-- beetl模板 -->
+			<result-type name="beetl" class="org.beetl.ext.struts2.Struts2BeetlActionResult" default="true" />
+			<!-- json -->
+			<result-type name="json" class="org.apache.struts2.json.JSONResult">
+				<param name="noCache">true</param>
+				<param name="root">jsonResult</param>
+			</result-type>
+		</result-types>
+
+		<interceptors>
+			<interceptor name="loginInterceptor" class="org.xzc.sshb.interceptor.LoginInterceptor" />
+			<interceptor name="preventLoginInterceptor" class="org.xzc.sshb.interceptor.PreventLoginInterceptor" />
+			<interceptor name="myAutoInjectInterceptor" class="org.xzc.sshb.interceptor.MyAutoInjectInterceptor" />
+			<interceptor name="administratorInterceptor" class="org.xzc.sshb.interceptor.AdministratorInterceptor" />
+			<interceptor name="resultCodeInterceptor" class="org.xzc.sshb.interceptor.ResultCodeInterceptor" />
+			<interceptor name="remenberInterceptor" class="org.xzc.sshb.interceptor.RememberInterceptor" />
+			<interceptor name="captchaInterceptor" class="org.xzc.sshb.interceptor.CaptchaInterceptor" />
+
+			<interceptor-stack name="myDefaultStack">
+
+				<interceptor-ref name="captchaInterceptor" />
+				<interceptor-ref name="resultCodeInterceptor" />
+				<interceptor-ref name="myAutoInjectInterceptor" />
+
+				<interceptor-ref name="exception" />
+				<interceptor-ref name="alias" />
+				<interceptor-ref name="servletConfig" />
+				<interceptor-ref name="i18n" />
+				<interceptor-ref name="chain" />
+				<interceptor-ref name="scopedModelDriven" />
+				<interceptor-ref name="modelDriven" />
+				<interceptor-ref name="fileUpload" />
+				<interceptor-ref name="checkbox" />
+				<interceptor-ref name="multiselect" />
+				<interceptor-ref name="staticParams" />
+				<interceptor-ref name="actionMappingParams" />
+				<interceptor-ref name="remenberInterceptor" />
+				<interceptor-ref name="params">
+					<param name="excludeParams">^class\..*,^dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,^parameters\..*,^action:.*,^method:.*</param>
+				</interceptor-ref>
+				<interceptor-ref name="conversionError" />
+				<interceptor-ref name="validation">
+					<param name="excludeMethods">input,back,cancel,browse</param>
+				</interceptor-ref>
+
+				<interceptor-ref name="prepare" />
+				<interceptor-ref name="workflow">
+					<param name="excludeMethods">input,back,cancel,browse</param>
+				</interceptor-ref>
+				<interceptor-ref name="debugging" />
+
+			</interceptor-stack>
+
+
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="myDefaultStack" />
+				<interceptor-ref name="loginInterceptor" />
+			</interceptor-stack>
+
+			<interceptor-stack name="preventLoginStack">
+				<interceptor-ref name="myDefaultStack" />
+				<interceptor-ref name="preventLoginInterceptor" />
+			</interceptor-stack>
+
+			<!-- 注意admin的位置 -->
+			<interceptor-stack name="adminStack">
+				<interceptor-ref name="loginStack" />
+				<interceptor-ref name="administratorInterceptor" />
+			</interceptor-stack>
+
+
+
+		</interceptors>
+
+		<default-interceptor-ref name="myDefaultStack" />
+
+		<global-results>
+			<!-- 没有管理员权限 以后考虑移动到别的xml下 -->
+			<result name="isNotAdmin" type="beetl">
+				<param name="location">/WEB-INF/html/isNotAdmin.html</param>
+			</result>
+			<!-- 异常映射 暂时没用到 -->
+			
+			<result name="exceptionUI">/exceptionUI.html</result>
+<!-- 			<result name="exceptionUI" type="dispatcher">/ex.jsp</result> -->
+			<result name="toExceptionUI" type="redirectAction">exceptionUI</result>
+
+			<!-- 已经登陆 却还想做没登陆的事情 -->
+			<result name="preventLogin" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">你已经登陆了.</param>
+			</result>
+			<!-- 还没登陆 却想做登陆的事情 -->
+			<result name="shouldLogin" type="redirect">
+				<param name="location">/msg</param>
+				<param name="msg">你还没有登陆,先去登录吧</param>
+				<param name="url">/user/loginUI</param>
+			</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping result="exceptionUI" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+</struts>

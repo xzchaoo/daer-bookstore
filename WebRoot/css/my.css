@@ -1,0 +1,195 @@
+.footer {
+	padding-top: 30px;
+	color: #000;
+}
+
+.footer .popover {
+	color: #000;
+}
+
+.footer .panel-body {
+	font-size: 30px;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.vertical-align-middle {
+	vertical-align: middle;
+}
+
+.footer-left {
+	padding: 2em 1em;
+}
+
+.footer-right {
+	padding: 2em 1em;
+}
+
+.footer2 .popover {
+	color: #000;
+}
+
+td.td-item-img {
+	width: 100px;
+	max-height: 100px;
+	vertical-align: middle !important;
+}
+
+img.td-img {
+	max-width: 100px;
+	margin: 0 auto;
+	max-height: 100px;
+}
+
+td.td-item-id {
+	width: 50px;
+}
+
+td.td-item-name {
+	width: 200px;
+	max-width: 200px;
+}
+
+td.td-item-author {
+	width: 70px;
+	max-width: 70px;
+}
+td.td-item-category {
+	width: 70px;
+	max-width: 70px;
+}
+
+td.td-item-price {
+	width: 50px;
+	max-width: 50px;
+}
+
+td.td-item-remain {
+	width: 50px;
+	max-width: 50px;
+}
+
+td.td-item-short {
+	
+}
+
+td.td-item-operation {
+	width: 120px;
+	max-width: 120px;
+}
+
+/*用于修复datepicker页面的年和月字体变成白色的bug*/
+.ui-datepicker-month,.ui-datepicker-year {
+	color: #000000;
+}
+
+.vlm {
+	vertical-align: middle !important;
+}
+
+/*用于record系列页面*/
+td.record-img {
+	width: 100px !important;
+	max-width: 100px !important;
+}
+
+td.record-name {
+	width: 200px;
+}
+
+td.record-price {
+	width: 50px;
+}
+
+td.record-quantity {
+	width: 50px;
+}
+
+td.record-desc {
+	width: 300px;
+}
+
+td.record-operation {
+	width: 200px;
+}
+
+/* #affix begin
+ 	affix如果效果要好一点 可能需要媒体查询
+ * */
+#affix {
+	position: fixed;
+	right: 150px;
+	top: 125px;
+}
+
+#affix li:hover>a {
+	transition: 0.2s ease;
+}
+
+#affix li>a {
+	transition: 0.2s ease;
+}
+
+/* #affix end */
+
+/* .totop begin */
+
+/*
+ 用于totpo按钮
+ 先用padding挤出一些空间 填充成ed4934色(类似红色)
+ 字体改成白色(fa的颜色)
+ */
+.totop {
+	padding: 10px;
+	background-color: #ed4934;
+	color: #ffffff;
+}
+/*
+ 固定在右下角
+ bottom要微调一下,因为设置为0的话,好像会有一部分陷下去
+ */
+.totop {
+	position: fixed;
+	right: 200px;
+	bottom: 60px;
+}
+
+/* .totop end */
+.rank-row {
+	transition: 0.3s ease;
+	border-left: 10px solid #eee;
+	border-right: 10px solid #eee;
+	border-top: 10px solid #eee;
+}
+
+.rank-row:last-child {
+	border-bottom: 10px solid #eee;
+}
+
+.rank-row:hover {
+	background-color: #ccc;
+	border-radius: 10px;
+	transition: 0.3s ease;
+}
+
+.footer2 {
+	background: #252A2F;
+	color: white;
+	padding: 20px 50px 20px;
+}
+
+.btn-footer {
+	color: #7e8793;
+	padding: 6px 12px;
+	display: inline-block;
+}
+
+.btn-footer:hover{
+	color:#ffffff;
+}
+
+.links > li{
+	border-bottom: 1px solid #434a54;
+}

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		 <property name="hbm2ddl.auto">update</property><!-- -->
+		<property name="show_sql">false</property>
+		<property name="format_sql">true</property>
+
+		<!-- 二级缓存-->
+		<property name="cache.use_second_level_cache">true</property>
+		<property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+		<property name="cache.use_query_cache">true</property>
+		
+		<mapping resource="org/xzc/sshb/domain/public.hbm.xml" />
+		<mapping resource="org/xzc/sshb/domain/User.hbm.xml" />
+		<mapping resource="org/xzc/sshb/domain/Item.hbm.xml" />
+		<mapping resource="org/xzc/sshb/domain/Record.hbm.xml" />
+		<mapping resource="org/xzc/sshb/domain/RecordItem.hbm.xml" />
+		<mapping resource="org/xzc/sshb/domain/State.hbm.xml" />
+		
+		<mapping class="org.xzc.sshb.domain.Chargeback" />
+		<mapping class="org.xzc.sshb.domain.PayCard" />
+		<mapping class="org.xzc.sshb.domain.Category" />
+	</session-factory>
+
+
+</hibernate-configuration>

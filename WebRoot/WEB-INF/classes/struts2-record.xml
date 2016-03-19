@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<package name="record" namespace="/record" extends="parent-config">
+		<default-interceptor-ref name="loginStack" />
+		<default-class-ref class="org.xzc.sshb.action.RecordAction" />
+	</package>
+
+	<package name="record-login" namespace="/record" extends="record">
+			<default-interceptor-ref name="loginStack" />
+		<default-class-ref class="org.xzc.sshb.action.RecordAction" />
+		<global-results>
+			<result name="viewDetailUISuccess">/WEB-INF/html/record/viewDetailUI.html</result>
+			<result name="receiveSuccess" type="redirect">/record/viewDetailUI?record.id=${record.id}</result>
+			<result name="listUISuccess">/WEB-INF/html/record/listUI.html</result>
+			<result name="cancelUISuccess">/WEB-INF/html/record/cancelUI.html</result>
+			<result name="cancelSuccess" type="redirect">/record/viewDetailUI?record.id=${record.id}</result>
+		</global-results>
+		<action name="listUI" method="listUI" />
+		<action name="viewDetailUI" method="viewDetailUI" />
+		<action name="receive" method="receive" />
+		<action name="cancelUI" method="cancelUI" />
+		<action name="cancel" method="cancel" />
+	</package>
+
+	<!-- 要登陆才可以使用的ajax -->
+	<package name="record-login-ajax" namespace="/record" extends="record">
+		<default-interceptor-ref name="loginStack" />
+		<global-results>
+			<result type="json" />
+		</global-results>
+		<!-- ajax特殊对待 -->
+		<action name="deleteRecordAjax" method="deleteRecordAjax" />
+	</package>
+
+	<package name="record-admin" namespace="/record" extends="record">
+		<default-interceptor-ref name="adminStack" />
+		<global-results>
+			<result name="repairSuccess" type="redirect">/record/listUI</result>
+			<result name="sendRightNowSuccess" type="redirect">/record/listUI</result>
+			<result name="setRecordStateSuccess" type="redirect">/record/viewDetailUI?record.id=${record.id}
+			</result>
+		</global-results>
+		<action name="repair" method="repair" />
+
+		<action name="sendRightNow" method="sendRightNow" />
+
+		<!-- 设置所有订单的状态为买家已经付款 -->
+		<action name="setRecordState" method="setRecordState" />
+
+	</package>
+
+</struts>

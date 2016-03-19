@@ -1,0 +1,275 @@
+<% var htmlHead={%>
+<title>列出图书</title>
+
+<script>
+	/*
+	 function getCartAjax( ) {
+	 var $cart = $( '#cart' );
+	 $
+	 .getJSON( 'item_getCartAjax' , {
+	 'randomNumber' : Math.random( ),
+	 } , function( result ) {
+	 if ( result.success ) {
+	 var text = "购物车: 总价=" + result.totalPrice + "<br/>";
+	 var items = [];
+	 for ( var index in result.rows) {
+	 var item = result.rows[index];
+	 text += "[" + "name=" + item.name + ",price=" + item.price + ",quantity=" + item.quantity + "]<br/>";
+	 items.push( result.rows[index] );
+	 }
+	 $cart.html( text );
+	 }
+	 } );
+	 }*/
+	var addToCartUrl = "item_addToCartAjax";
+	function addToCart( id , count ) {
+		count = count || 1;
+		$.getJSON( addToCartUrl , {
+			"item.id" : id,
+			count : count,
+			'randomNumber' : Math.random( ),
+		} , function( result ) {
+			if ( result.success )
+				$( '#ct' ).datagrid( 'reload' );
+		} );
+	}
+	function getRowIndex( target ) {
+		var $tr = $( target ).closest( 'tr.datagrid-row' );
+		//属性里存放着索引信息
+		return parseInt( $tr.attr( 'datagrid-row-index' ) );
+	}
+	function updateActions( index ) {
+		$( '#ct' ).datagrid( 'updateRow' , {
+			index : index,
+			row : {}
+		} );
+	}
+	function update3( index ) {
+		var $div = $( 'tr[datagrid-row-index="' + index + '"] td[field="operation"] div' );
+		$div.find( '.atc' ).linkbutton( {
+			plain : true,
+		} ).on( 'click' , function( ) {
+			var id = $( this ).closest( 'tr' ).find( 'td[field="id"] div' ).text( );
+			addToCart( id );
+			return false;
+		} );
+		$div.find( '.rfc' ).linkbutton( {
+			plain : true,
+		} ).on( 'click' , function( ) {
+			var id = $( this ).closest( 'tr' ).find( 'td[field="id"] div' ).text( );
+			addToCart( id , -1 );
+			return false;
+		} );
+		$div.find( '.edc' ).linkbutton( {
+			plain : true
+		} ).on( 'click' , function( ) {
+			$( '#ct' ).datagrid( 'beginEdit' , getRowIndex( this ) );
+			return false;
+		} );
+	}
+	function update2( index ) {
+		var $div = $( 'tr[datagrid-row-index="' + index + '"] td[field="operation"] div' );
+		$div.find( '.svc' ).linkbutton( {
+			plain : true
+		} ).on( 'click' , function( ) {
+			var index = getRowIndex( this );
+			var row = $( '#ct' ).datagrid( 'getData' ).rows[index];
+			$( '#ct' ).datagrid( 'endEdit' , index );
+			$.getJSON( "item_addToCartAjax" , {
+				'item.id' : row.id,
+				edit : true,
+				count : row.quantity,
+				randomNumber : Math.random( ),
+			} , function( result ) {
+				$( '#ct' ).datagrid( 'reload' );
+			} ).fail( function( ) {
+				$.messager.alert( "错误" , "你输入的数值不合法" , "error" );
+				$( '#ct' ).datagrid( 'reload' );
+			} );
+		} );
+		$div.find( '.csc' ).linkbutton( {
+			plain : true
+		} ).on( 'click' , function( ) {
+			$( '#ct' ).datagrid( 'cancelEdit' , index );
+		} );
+	}
+	$( function( ) {
+		$( '#ct' ).datagrid( {
+			//	singleSelect : true,
+			columns : [ [
+					{
+						field : 'ik',
+						checkbox : 'true'
+					},
+					{
+						field : 'id',
+						title : 'id'
+					},
+					{
+						field : 'name',
+						title : 'name'
+					},
+					{
+						field : 'price',
+						title : 'price'
+					},
+					{
+						field : 'quantity',
+						title : 'quantity',
+						editor : {
+							type : 'text'
+						}
+					},
+					{
+						field : 'operation',
+						title : 'operation',
+						formatter : genOperation,
+						width : 120
+					} ] ],
+			onBeforeEdit : function( index , row ) {
+				row.isEditing = true;
+				updateActions( index );
+				update2( index );
+			},
+			onAfterEdit : function( index , row ) {
+				row.isEditing = false;
+				updateActions( index );
+				update3( index );
+			},
+			onCancelEdit : function( index , row ) {
+				//这里的row是指数据行(只放数据没有其他内容)
+				row.isEditing = false;
+				updateActions( index );
+				update3( index );
+			},
+			url : 'item_doGetCartAjax',
+			title : "购物车",
+			toolbar : '#tb',
+			onLoadSuccess : function( ) {
+				var length = $( this ).datagrid( 'getData' ).rows.length;
+				for (var i = 0; i < length; ++i)
+					update3( i );
+				var data = $( '#ct' ).datagrid( 'getData' );
+				$( '#ct' ).datagrid( 'getPanel' )
+						.panel( 'setTitle' , "购物车 您的余额:" + data.userMoney + " 您的购物车总价:" + data.totalPrice );
+				if ( data.userMoney < data.totalPrice )
+					$.messager.alert( '提示' , '您当前的余额不足购物车总价' , 'info' );
+			}
+
+		} );
+		$( '.addToCartAjax' ).on( 'click' , function( ) {
+			addToCart( $( this ).data( 'id' ) );
+			return false;
+		} );
+		$( '#tb-save' ).on( 'click' , function( ) {
+			//alert( $( '#ct' ).closest( '.datagrid-view' ).find( '.datagrid-body :checkbox:checked' ).length );
+			var rows = $( '#ct' ).datagrid( 'getSelections' );
+			if ( !rows.length ) {
+				$.messager.alert( '提示' , '你没有选中任何商品' , 'info' );
+			} else {
+				var params = {};
+				var count = 0;
+				for ( var i in rows)
+					params["ids[" + ( count++ ) + "]"] = rows[i].id;
+				params["randomNumber"] = Math.random( );
+
+				$.getJSON( "item_doCheckoutAjax" , params , function( result ) {
+				} ).always( function( result ) {
+					$( '#ct' ).datagrid( 'reload' );
+				} );
+			}
+		} );
+		$( '#tb-remove' ).on( 'click' , function( ) {
+			var rows = $( '#ct' ).datagrid( 'getSelections' );
+			if ( !rows.length ) {
+				$.messager.alert( '提示' , '你没有选中任何商品' , 'info' );
+			} else {
+				$.messager.confirm( '询问' , '真的要删除这' + rows.length + '件商品吗' , function( r ) {
+					if ( r ) {
+						var params = {};
+						var count = 0;
+						for ( var i in rows)
+							params["ids[" + ( count++ ) + "]"] = rows[i].id;
+						params["randomNumber"] = Math.random( );
+						$.getJSON( 'item_removeItemAjax' , params , function( result ) {
+							if ( result.success )
+								$( '#ct' ).datagrid( 'reload' );
+						} );
+					}
+				} );
+			}
+		} );
+	} );
+	function genOperation( value , row , index ) {
+		var $div = $( '<div>' );
+		if ( row.isEditing ) {
+			$( '<a>' ).attr( 'href' , 'javascript:void(0)' ).addClass( 'svc easyui-linkbutton' ).text( '保存' )
+					.appendTo( $div );
+			$( '<a>' ).attr( 'href' , 'javascript:void(0)' ).addClass( 'csc easyui-linkbutton' ).text( '取消' )
+					.appendTo( $div );
+			return $div.html( );
+		} else {
+			$( '<a>' ).attr( 'href' , 'javascript:void(0)' ).addClass( 'atc easyui-linkbutton' ).text( '增加' )
+					.appendTo( $div );
+			$( '<a>' ).attr( 'href' , 'javascript:void(0)' ).addClass( 'rfc easyui-linkbutton' ).text( '减少' )
+					.appendTo( $div );
+			$( '<a>' ).attr( 'href' , 'javascript:void(0)' ).addClass( 'edc easyui-linkbutton' ).text( '编辑' )
+					.appendTo( $div );
+			return $div.html( );
+		}
+	}
+</script>
+<%};%> <% var htmlBody={ %>
+
+<table id="ct" style="width: 350px;height:200px;" pagination="true" />
+
+<div id="tb" style="padding:3px">
+	<div style="margin-bottom:5px;">
+		<a id="tb-save" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true">结算</a>
+		<a id="tb-remove" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除选中</a>
+	</div>
+</div>
+<table id="tt" class="easyui-datagrid" style="float:right;width:800px;height: 200px;" singleSelect="true"
+	pagination="true" toolbar="#ttb" title="书列表">
+	<thead>
+		<tr>
+			<th field="id" width="30" align="right">id</th>
+			<th field="name" width="150" align="right">name</th>
+			<th field="price" width="60" align="right">price</th>
+			<th field="remain" width="60" align="right">remain</th>
+			<th field="description" width="300" align="left">description</th>
+			<th field="operation" width="150" align="right">操作</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<%for(item in itemList){%>
+		<tr class="row">
+			<td>${item.id}</td>
+			<td>${item.name}</td>
+			<td>${item.price}</td>
+			<td>${item.remain}</td>
+			<td>${item.description}</td>
+			<td>
+				<a href="item_updateUI?item.id=${item.id}">编辑</a>
+				<a href="item_delete?item.id=${item.id}">删除</a>
+				<a class="addToCartAjax" href="item_addToCartAjax" data-id="${item.id}">加入购物车</a>
+			</td>
+		</tr>
+		<%}%>
+	</tbody>
+</table>
+
+<div id="ttb" style="padding:3px">
+	<div style="margin-bottom:5px;">
+		<a id="ttb-add" href="item_addUI" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+	</div>
+</div>
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+
+
+<!--
+http://www.cnblogs.com/huozhicheng/archive/2011/09/27/2193605.html
+ -->

@@ -1,0 +1,55 @@
+<% var htmlHead={%>
+<title>你是管理员 ${ai.name} , 用户列表</title>
+
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [ {
+			name : "用户列表",
+			url : '',
+		} ] );
+	} )
+</script>
+<%};%> <% var htmlBody={ %>
+
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover table-condensed">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>name</th>
+					<th>password</th>
+					<th>age</th>
+					<th>sex</th>
+					<th>email</th>
+					<th>money</th>
+					<th>address</th>
+					<th>state</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<%for(user in userList){%>
+				<tr>
+					<td>${user.id}</td>
+					<td>${user.name}</td>
+					<td>${user.password}</td>
+					<td>${user.age}</td>
+					<td>${user.sex}</td>
+					<td>${user.email}</td>
+					<td>${user.money}</td>
+					<td>${user.address}</td>
+					<td>${user.state}</td>
+					<td>
+						<a href="updateByAdminUI?user.id=${user.id}">编辑</a>
+						<a href="delete?user.id=${user.id}">删除</a>
+					</td>
+				</tr>
+				<%}%>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

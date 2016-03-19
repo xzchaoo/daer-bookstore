@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh_cn">
+<meta charset="utf-8">
+<head>
+<base href="http://127.0.0.1:8080/ssh_beetl_1/" />
+
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/messenger/messenger.js"></script>
+<script type="text/javascript" src="js/messenger/messenger-theme-future.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/icheck.js"></script>
+
+<link href="css/messenger/messenger.css" rel="stylesheet">
+<link href="css/messenger/messenger-theme-future.css" rel="stylesheet">
+<link href="css/iCheck/square/blue.css" rel="stylesheet">
+
+<script>
+	$( function( ) {
+		$( 'input' ).iCheck( {
+			labelHover : false,
+			cursor : true,
+		    checkboxClass: 'icheckbox_square-blue',
+		    radioClass: 'iradio_square-blue',
+		    increaseArea: '20%'
+		} );
+	} );
+</script>
+</head>
+<body style="height: 2000px;">
+
+	<label> <input type="checkbox" name="quux[1]" > Foo
+	</label>
+
+	<label for="baz[1]">Bar</label>
+	<input type="radio" name="quux[2]" id="baz[1]" checked>
+
+	<label for="baz[2]">Bar</label>
+	<input type="radio" name="quux[2]" id="baz[2]">
+
+</body>
+</html>

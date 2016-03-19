@@ -1,0 +1,58 @@
+<%var htmlHead={%>
+<title>欢迎登陆</title>
+<%};%> <%var htmlBody={%>
+<div class="row">
+	<div class="col-xs-3">
+		<div class="panel panel-default">
+			<div class="panel-heading" style="color:#a94442;">${params.msg!'&nbsp;'}</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="col-xs-12">
+							<form id="loginForm" class="form-horizontal" action="${ctxPath}/user/login" method="post">
+								<div class="form-group">
+									<input class="form-control" type="text" name="user.name" placeholder="账号" />
+								</div>
+								<div class="form-group">
+									<input class="form-control" type="password" name="user.password" placeholder="密码" />
+								</div>
+								<div class="form-group has-feedback">
+									<button type="submit" class="btn btn-info btn-block">登陆</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-9">
+		<div class="jumbotron">
+			<h4>还不是我们的成员?</h4>
+			<div class="btn-group">
+				<a href="${ctxPath}/user/registerUI" class="btn btn-primary">
+					<i class="fa fa-hand-o-right">加入我们</i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="${ctxPath}/js/my/user.js"></script>
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [ {
+			name : "登陆",
+			url : '',
+		} ] );
+		var vrf = xzc.validateForm( $( '#loginForm' ) , 'user' , function( opt ) {
+			opt.rules['user.name'].xremote = '${ctxPath}/user/checkNameExistsAjax';
+		} );
+
+		<%if(!isEmpty(params.fieldErrorsString)){%>
+		vrf.showErrors( ${params.fieldErrorsString} );
+		<%}%>
+
+	} );
+</script>
+<%};%> <%include('/WEB-INF/include/template.html',{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

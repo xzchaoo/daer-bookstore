@@ -1,0 +1,41 @@
+/*只显示一行 多余的用...代替*/
+.rankUI-item-description {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.rankUI-item {
+	border-radius: 10px;
+	padding: 5px;
+	transition: 0.3s ease;
+}
+.rankUI-item:hover {
+	background-color: #ddd;
+	transition: 0.3s ease;
+}
+.rankUI-item-img {
+	max-width: 100%;
+	width: 100%;
+	height: 300px;
+	max-height: 300px;
+	overflow: hidden;
+	display: table;
+}
+.rankUI-item-img a {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+.rankUI-item-img a img {
+	max-width: 100%;
+	max-height:300px;
+}
+
+.rankUI-item-name {
+	text-align: center;
+	text-shadow: 0 0 1px black;
+	font-size: 16px;
+}
+.rankUI-item-quantity {
+	text-align: center;
+}

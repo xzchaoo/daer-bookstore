@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+ -->
+	<package name="cart" namespace="/cart" extends="parent-config">
+		<default-interceptor-ref name="loginStack" />
+		<default-class-ref class="org.xzc.sshb.action.CartAction" />
+		<global-results>
+			<result name="listUISuccess">/WEB-INF/html/cart/listUI.html</result>
+		</global-results>
+		<action name="listUI" method="listUI"/>
+	</package>
+
+
+	<!-- 要登陆才可以使用的ajax -->
+	<package name="cart-login-ajax" namespace="/cart" extends="cart">
+		<global-results>
+			<result type="json" />
+		</global-results>
+		<!-- ajax特殊对待 -->
+		<action name="addToCartAjax" method="addToCartAjax" />
+		<action name="doCheckoutAjax" method="doCheckoutAjax" />
+		<action name="doGetCartAjax" method="doGetCartAjax" />
+	</package>
+</struts>

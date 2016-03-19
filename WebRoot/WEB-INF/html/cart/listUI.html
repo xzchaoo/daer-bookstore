@@ -1,0 +1,117 @@
+<% var htmlHead={%>
+<title>${ai.name} 的购物车</title>
+
+<script src="${ctxPath}/js/my/template/template.js"></script>
+<script src="${ctxPath}/js/icheck.js"></script>
+<link href="${ctxPath}/css/iCheck/square/blue.css" rel="stylesheet">
+<script src="${ctxPath}/js/my/cart/listUI.js"></script>
+
+<script>
+	$( function( ) {
+		//设置二级导航
+		xzc.setSecondNav( [
+				{
+					name : '商品列表',
+					url : '${ctxPath}/item/listUI',
+				},
+				{
+					name : '购物车',
+					url : '',
+				} ] );
+		//iCheck和原生的checkbox不兼容 需要用iCheck的事件 不然不会响应你的事件
+		$( ':checkbox' ).iCheck( {
+			labelHover : false,
+			cursor : true,
+			checkboxClass : 'icheckbox_square-blue',
+			radioClass : 'iradio_square-blue',
+			increaseArea : '20%'
+		} );
+		//注意这个 'check' 会自动触发 相应的事件!
+		/*$( ':checkbox' ).iCheck( 'check' , function( ) {
+			//这个函数会在check调用之后被调用
+		} );*/
+	} );
+</script>
+<%};%> <% var htmlBody={ %>
+<div class="row">
+	<div class="col-xs-12">
+
+		<table id="cart" class="table table-striped table-bordered table-hover table-responsive">
+			<thead>
+				<tr>
+					<th>
+						<label><input id="selectAll" type="checkbox" />全选</label>
+					</th>
+					<th>图片</th>
+					<th>名称</th>
+					<th>价格</th>
+					<th>数量</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%for(var e in cartItemList){%>
+				<tr data-id='${e.id}'>
+					<td>
+						<input id='checkbox-${e.id}' type="checkbox" />
+					</td>
+					<td style="width:100px;">
+						<a href="${ctxPath}/item/viewDetailUI?item.id=${e.id}">
+							<img src="${ctxPath}${e.imgPath}" class="img-thumbnail img-responsive" style="width:100px;" />
+						</a>
+					</td>
+					<td>
+						<a href="${ctxPath}/item/viewDetailUI?item.id=${e.id}">${e.name}</a>
+					</td>
+					<td id="price-${e.id}" class="text-center">${e.price}</td>
+					<td style="width:140px;">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<button type="submit" class="btn btn-default item-sub">-</button>
+									</span>
+									<input id="quantity-${e.id}" type="text" class="form-control text-center" name="e.quantity"
+										value="${e.quantity}" />
+									<span class="input-group-btn">
+										<button type="submit" class="btn btn-default item-add">+</button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12"></div>
+						</div>
+					</td>
+					<td>
+						<div class="btn-group">
+							<button type="button" class="btn btn-default item-clear">清零</button>
+							<button type="button" class="btn btn-default item-save">保存</button>
+							<button type="button" class="btn btn-default item-del">删除</button>
+						</div>
+					</td>
+				</tr>
+				<%}%>
+				<tr>
+					<td class="text-center">总价</td>
+					<td id="totalPrice" class="text-center">0</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<div class="row">
+							<div class="col-xs-12">
+								<button id="item-select-all" type="button" class="btn btn-default">全选</button>
+								<button id="item-del-all" type="button" class="btn btn-default">选中清零</button>
+								<button id="item-save-all" type="button" class="btn btn-default">选中保存</button>
+								<button id="item-do-checkout" type="button" class="btn btn-default">结账</button>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

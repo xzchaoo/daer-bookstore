@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+<meta charset="utf-8">
+<link style="stylesheet" rel="stylesheet" href="/css/jquery-ui.css">
+<script src="/js/jquery-1.11.1.js"></script>
+<script src="/js/jquery-ui.js"></script>
+<script>
+	var projects = [
+			{
+				value : "jquery",
+				label : "jQuery",
+			},
+			{
+				value : "jquery-ui",
+				label : "jQuery UI",
+			},
+			{
+				value : "sizzlejs",
+				label : "Sizzle JS",
+			} ];
+	$( function( ) {
+		$( "#a3" ).autocomplete( {
+			minLength : 0,
+			source : projects,
+			focus : function( event , ui ) {
+				//$( "#a3" ).val( ui.item.label );
+				return false;
+			},
+			select : function( event , ui ) {
+				$( "#a3" ).val( ui.item.label );
+				$( "#a3-id" ).val( ui.item.value );
+				return false;
+			}
+		} ).autocomplete( "instance" )._renderItem = function( ul , item ) {
+			return $( "<li>" ).append( "<a>" + item.label + "<br>" + item.desc + "</a>" ).appendTo( ul );
+		};
+	} );
+
+	$( '#a2' ).autocomplete( {
+		source : function( request , response ) {
+			var value = request.term;//用户的输入放在term里 除此之外好像没啥作用了
+			//在这个函数体里面你很有可能要使用到$.ui.autocomplete.escapeRegex这个函数
+			//用于将字符转义
+			/*
+			 $.extend( $.ui.autocomplete, {
+			 escapeRegex: function( value ) {
+			 return value.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" );
+			 },
+			 filter: function( array, term ) {
+			 var matcher = new RegExp( $.ui.autocomplete.escapeRegex( term ), "i" );
+			 return $.grep( array, function( value ) {
+			 return matcher.test( value.label || value.value || value );
+			 });
+			 }
+			 });*/
+
+			//response是一个回调函数
+			//接受一个参数作为显示的值
+			//这个参数必须是一个数组,且内容是字符串
+			response( [
+					'1',
+					'2',
+					'3' ] );
+		}
+	} );
+	//最简单的使用source提供列表就行
+	$( '#a1' ).autocomplete( {
+		source : [
+				'aaa',
+				'bbb' ],
+		//select表示弹出的框的项被选后要干嘛
+		select : function( event , ui ) {
+			$( this ).val( ui.item.label );
+			/* $( "#project" ).val( ui.item.label );
+			$( "#project-id" ).val( ui.item.value );
+			$( "#project-description" ).html( ui.item.desc );
+			$( "#project-icon" ).attr( "src", "images/" + ui.item.icon );
+			 */
+
+			return false;
+		}
+	} );
+</script>
+</head>
+
+<body>
+	<script>
+		$( function( ) {
+			var o = {};
+			$.exnteds( o , {
+				name : 'xzc'
+			} );
+			alert(1);
+			alert(o.name);
+		} );
+	</script>
+	a1
+	<input id="a1" type="text" name="name" placeholder="you name..." />
+	<br /> a2
+	<input id="a2" type="text" name="name" placeholder="you name..." />
+	<br /> a3
+	<input id="a3" type="text" name="name" placeholder="you name..." />
+	<br />
+	<input id="a3-id" type="hidden" name="id" placeholder="" />
+</html>

@@ -1,0 +1,111 @@
+﻿<%var htmlHead={%>
+<title>销量排行, ${ai.name}</title>
+
+<script src="${ctxPath}/js/my/template/template.js"></script>
+<script>
+	$( function( ) {
+		xzc.setSecondNav( [
+				{
+					name : '商品列表',
+					url : '${ctxPath}/item/listUI',
+				},
+				{
+					name : "销量排行",
+					url : ''
+				} ] );
+	} );
+	q = {
+		rows : ${rows},
+		page : ${page},
+		total : ${total},
+		keyword : '${keyword!}',
+	};
+</script>
+
+
+<script type="text/javascript" src="${ctxPath}/js/highcharts.js"></script>
+<script type="text/javascript" src="${ctxPath}/js/highcharts-3d.js"></script>
+
+<script>
+	$( function( ) {
+
+		$( '#container' ).highcharts( {
+			chart : {
+				type : 'column',
+				margin : [
+						50,
+						50,
+						100,
+						80 ]
+			},
+			title : {
+				text : '当天销量柱形图'
+			},
+			xAxis : {
+					categories : ${rankItemNamesString},
+				labels : {
+					rotation : -45,
+					align : 'right',
+					style : {
+						fontSize : '13px',
+						fontFamily : 'Verdana, sans-serif'
+					}
+				}
+			},
+			yAxis : {
+				min : 0,
+				title : {
+					text : '当天销量'
+				}
+			},
+			legend : {
+				enabled : false
+			},
+			tooltip : {
+				pointFormat : '销量: <b>{point.y:.1f}</b>',
+			},
+			series : [ {
+				name : '销量',
+					data : ${rankItemQuantitiesString},
+				dataLabels : {
+					enabled : true,
+					rotation : 0,
+					color : '#000',
+					align : 'right',
+					x : 4,
+					y : 0,
+					style : {
+						fontSize : '13px',
+						fontFamily : 'Verdana, sans-serif',
+						textShadow : '0 0 1px black'
+					}
+				}
+			} ]
+					} );
+		﻿
+			
+		
+	} );
+</script>
+
+
+<%};%> <% var htmlBody={ %>
+
+
+<div id="container" style="min-width:700px;height:400px">asdf</div>
+
+<%for(var ri in rankItems){ var i=ri.item; %>
+<div class="row rank-row">
+	<div class="col-xs-4">
+		<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">
+			<img src="${ctxPath}${i.imgPath}" class="img-responsive">
+		</a>
+	</div>
+	<div class="col-xs-4">
+		<a href="${ctxPath}/item/viewDetailUI?item.id=${i.id}">${i.name}</a>
+	</div>
+	<div class="col-xs-2">销量${ri.quantity}</div>
+</div>
+<%}%>
+
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

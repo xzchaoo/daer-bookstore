@@ -1,0 +1,67 @@
+<% var htmlHead={%>
+<title>统计</title>
+<script src="${ctxPath}/js/jquery-chosen.js"></script>
+<link href="${ctxPath}/css/jquery-chosen.css" rel="stylesheet">
+<script src="${ctxPath}/js/my/public/datepicker.js"></script>
+<script type="text/javascript">
+	$(function() {
+		xzc.setSecondNav([ {
+			name : "统计"
+		} ]);
+		$('#category').chosen();
+		xzc.datepicker('#beginTime', {});
+		xzc.datepicker('#endTime', {});
+	});
+</script>
+<%};%> <% var htmlBody={%>
+
+<div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<form class="form-horizontal" action="${ctxPath}/statisticsQuery" method="post">
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label">账号</label>
+				<div class="col-xs-3">
+					<input type="text" name="username" class="form-control" value="${username!}" />
+				</div>
+			</div>
+			<!--
+			<div class="form-group">
+				<label class="col-xs-2 control-label">类别</label>
+				<div class="col-xs-3">
+					<select id="category" class="category" class="form-control" style="width: 100%;">
+						<option value="0">任意</option>
+						<option value="1">2</option>
+						<option value="2">3</option>
+						<option value="3">4</option>
+					</select>
+				</div>
+			</div>
+			 -->
+			<div class="form-group">
+				<label class="col-xs-2 control-label">时间段</label>
+				<div class="col-xs-3">
+					<input type="text" id="beginTime" name="beginTime" class="form-control" placeholder="开始时间" value="${beginTime!,dateFormat='yyyy-MM-dd'}" />
+				</div>
+				<div class="col-xs-3">
+					<input type="text" id="endTime" name="endTime" class="form-control" placeholder="结束时间" value="${endTime!,dateFormat='yyyy-MM-dd'}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-xs-12">
+					<button type="submit" class="btn btn-info btn-block">查询</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</div>
+
+共有${records.~size!0}个订单
+<%for(r in records){%>
+	<%include('/WEB-INF/html/record/fragment/record.html',{record:r,detail:true,showEvaluatedCount:true}){}%>
+<%}%>
+<script><%include('/js/my/record/fragment/initRecord.js'){}%></script>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

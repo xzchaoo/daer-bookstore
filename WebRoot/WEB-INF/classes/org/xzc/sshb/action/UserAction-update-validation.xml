@@ -1,0 +1,40 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.2//EN" "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+<validators>
+
+	<field name="user">
+		<field-validator type="required">
+			<message>请指定用户信息</message>
+		</field-validator>
+	</field>
+	
+	<field name="user.sex">
+		<field-validator type="int">
+			<param name="min">0</param>
+			<param name="max">2</param>
+			<message>性别选择有误</message>
+		</field-validator>
+	</field>
+	
+	<field name="user.email">
+		<field-validator type="required">
+			<message>请输入合法的邮箱地址</message>
+		</field-validator>
+		<field-validator type="email">
+			<message>请输入合法的邮箱地址</message>
+		</field-validator>
+	</field>
+	
+	<!-- 日期合法性检测? -->
+	<field name="user.birthday">
+		<field-validator type="required">
+			<message>请输入出生日期</message>
+		</field-validator>
+		<field-validator type="lessThanNow">
+			<!-- TODO考虑与当前时间对比,不超过当前日期,需要自己定义一个验证器 -->
+			<param name="min">1990-01-01</param>
+			<message>你的岁数有点...?</message>
+		</field-validator>
+	</field>
+
+</validators>
+

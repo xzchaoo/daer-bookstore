@@ -1,0 +1,86 @@
+<% //type=${type}表示当前是显示未评价的订单(noYetEvaluated)还是全部订单(all)
+var ntxt; var ntype; var all=type!'all'=='all'; if(all){
+ntype='noYetEvaluated'; ntxt='只显示未评价的订单'; }else{ ntype='all'; ntxt='显示全部订单'; } %> <% var htmlHead={%>
+<title>显示订单</title>
+<style>
+.td-img,
+.td-img img{
+text-align:center;
+	width: 100px;
+	vertical-align: middle;
+	line-height: 200px;
+}
+.td-name {
+	width: 200px;
+}
+
+.td-price {
+	width: 100px;
+}
+
+.td-quantity {
+	width: 100px;
+}
+
+.td-desc {
+	width: 200px;
+}
+
+.td-operation {
+	width: 200px;
+}
+.table tr{
+	height:100px;
+}
+</style>
+<%};%> <% var htmlBody={ %>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<% if(records.~size==0) print('您当前没有订单'); else print(user.name+',您好,共有'+(records.~size)+'个订单.'); %>
+					<a class="btn btn-default pull-right" href="${ctxPath}/record/doEvaluateUI?type=${ntype}" style="margin-top:-8px">${ntxt}</a>
+				</h3>
+			</div>
+		</div>
+
+		<% for(var record in records){%>
+
+		<div class="panel <%print(recordLP.even?'panel-danger':'panel-success');%>">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					订单编号:
+					<a href="${ctxPath}/record/viewDetailRecord?record.id=${record.id}">${record.id}</a>
+					日期: ${record.buyTime,dateFormat='yyyy-MM-dd'} 总价: ${record.totalPrice} 共有${record.itemCount}项商品 ,
+					${record.evaluatedCount}项已经评价完毕.
+					<a class="pull-right btn btn-warning" style="margin-top:-8px;"
+						href="${ctxPath}/record/viewDetailRecord?record.id=${record.id}">详情</a>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-bordered table-hover table-responsive">
+					<%for(var ri in record.recordItems){ var ed=ri.star!=0; var oc=ed?'btn-success':'btn-warning'; var
+					txt=ed?'已评':'评价'; %>
+					<tr>
+						<td class="td-img">
+							<img src="${ctxPath}${ri.item.imgPath}" class="img-responsive img-thumbnail" />
+						</td>
+						<td class="td-name">
+							<a href="${ctxPath}/item/viewDetailUI?item.id=${ri.item.id}">${ri.item.name}</a>
+						</td>
+						<td class="td-price">${ri.item.price}</td>
+						<td class="td-quantity">${ri.quantity}</td>
+						<td class="td-desc">${ri.item.shortDescription}</td>
+						<td class="td-operation">
+							<a href="${ctxPath}/record/doEvaluateRecordItemUI?recordItem.id=${ri.id}" class="btn ${oc}">${txt}</a>
+						</td>
+					</tr>
+					<%}%>
+				</table>
+			</div>
+		</div>
+		<%}%>
+	</div>
+</div>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

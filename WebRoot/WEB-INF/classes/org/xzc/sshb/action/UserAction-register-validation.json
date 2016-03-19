@@ -1,0 +1,50 @@
+var config = {
+	'user.name' : {
+		requiredstring : {
+			msg : "请输入用户名称",
+		},
+		regex : {            //我是注释
+			regex : 'xzc\\d+',
+			msg : '用户名称必须以xzc开头,并且其余全是数字',
+		},
+		stringlength : {
+			minLength : 4,
+			maxLength : 20,
+			msg : '用户名长度必须大于等于{minLength}小于等于${maxLength}'
+		}
+	},
+	'user.password' : {
+		requiredstring : {
+			msg : '请输入用户密码',
+		},
+		stringlength : {
+			minLength : 6,
+			maxLength : 20,
+			msg : '用户密码长度必须大于等于{minLength}小于等于${maxLength}'
+		}
+	},
+	'user.sex' : {
+		int : {
+			min : 0,
+			max : 2,
+			msg : '请选择正确的性别'
+		}
+	},
+	'user.email' : {
+		requiredstring : {
+			msg : '请输入合法的邮箱'
+		},
+		date : {
+			msg : '请输入合法的邮箱'
+		}
+	},
+	'user.birthday' : {
+		required : {
+			msg : '请输入出生日期',
+		},
+		lessThanNow : {
+			min : '1990-01-01',
+			msg : '你的岁数有点...233?'
+		}
+	}
+};

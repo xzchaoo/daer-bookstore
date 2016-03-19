@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh_cn">
+<meta charset="utf-8">
+<head>
+<base href="http://127.0.0.1:8080/ssh_beetl_1/" />
+<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/mmenu/jquery.mmenu.min.all.js"></script>
+
+<link href="css/mmenu/jquery.mmenu.all.css" rel="stylesheet">
+
+<script>
+	$( function( ) {
+		$( 'nav' ).mmenu( {} , {
+			offCanvas : {
+				pageNodetype : "section"
+			}
+		} );
+		$( 'button.trg' ).click( function( ) {
+			$( $( this ).data( 'target' ) ).data( 'mmenu' ).open( );
+		} );
+	} );
+</script>
+</head>
+<body>
+	<button class="trg" data-target="#menu1">打开1</button>
+	<button class="trg" data-target="#menu2">打开2</button>
+	<nav id="menu1">
+		<ul>
+			<li>
+				<a href="#">Home</a>
+			</li>
+			<li>
+				<a href="#about">About us</a>
+				<ul>
+					<li>
+						<a href="#about/history">History</a>
+					</li>
+					<li>
+						<a href="#about/team">The team</a>
+						<ul>
+							<li>
+								<a href="#about/team/management">Management</a>
+							</li>
+							<li>
+								<a href="#about/team/sales">Sales</a>
+							</li>
+							<li>
+								<a href="#about/team/development">Development</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#about/address">Our address</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="#contact">Contact</a>
+			</li>
+		</ul>
+	</nav>
+
+	<nav id="menu2">
+		<div>
+			<img src="paht/to/logo.png" />
+			<p>Welcome to our advanced menu.</p>
+			<ul>
+				<li>
+					<span>Friends</span>
+					<div>
+						<p>Some of my friends:</p>
+						<ul>
+							<li>
+								<span>Alan Thompson</span>
+							</li>
+							<li>
+								<span>Anne Cook</span>
+							</li>
+							<li>
+								<span>Carolyn Garcia</span>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<span>Family</span>
+				</li>
+				<li>
+					<span>Work colleagues</span>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+</body>
+</html>

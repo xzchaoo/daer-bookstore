@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh_cn">
+<meta charset="utf-8">
+<head>
+<base href="http://127.0.0.1:8080/ssh_beetl_1/" />
+
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/jsviews.js"></script>
+<script type="text/javascript" src="js/jquery.validate.js"></script>
+<script type="text/javascript" src="js/xjQuery.js"></script>
+
+
+<link href="css/bootstrap.css" rel="stylesheet">
+
+<script id="t1" type="text/x-jsrender">
+<div id="xzc-dialog" class="modal fade">
+	<div class="modal-dialog" >
+		<div class="modal-content panel-default {{:panelClass}}">
+			<div class="modal-header panel-heading">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">{{:title}}</h4>
+			</div>
+			<div class="modal-body">
+				{{:body}}
+			</div>
+			<div class="modal-footer">
+				{{if showCancel}}
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{:cancelText}}</button>
+				{{/if}}
+				<button type="button" class="btn btn-primary" data-dismiss="modal">{{:submitText}}</button>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script>
+	$( function( ) {
+		$( '#b1' ).click( function( ) {
+			xzc.alert( {
+				body : "你好",
+			} );
+			/*var html = $.templates( '#t1' ).render( {
+				title : "提示",
+				panelClass : "panel-primary",
+				submitText : "确定",
+				showCancel : false,
+				cancelText : "取消",
+				body : "你的网络连接断线了",
+			} );
+			$( '#xzc-dialog' ).remove( );
+			$( html ).appendTo( $( 'body' ) ).modal( {
+				keyboard : false,
+			//backdrop : false,
+			} );
+			 */
+		} );
+	} );
+</script>
+</head>
+<body style="height: 2000px;">
+	<button id="b1" class="btn btn-success">alert</button>
+</body>
+</html>

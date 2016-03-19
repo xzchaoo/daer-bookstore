@@ -1,0 +1,32 @@
+<% var htmlHead={%>
+<title>列出图书</title>
+
+<script>
+</script>
+<style>
+	#record ul{
+		font-size:20px;
+	}
+	#record ul li{
+		font-size:14px;
+	}
+</style>
+<%};%> <% var htmlBody={ %>
+	<div id="record">
+	<%for(var record in records){
+			print('<ul>');
+			print('订单号'+record.id+' 总价='+record.totalPrice+'<br/>');
+			for(var recordItem in record.recordItems){
+				print('<li>'+recordItem.item.name+' '+recordItem.quantity+'个<br/></li>');
+			}
+			print('</ul>');
+		}%>
+		</div>
+<%};%>
+<%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+
+
+<!--
+http://www.cnblogs.com/huozhicheng/archive/2011/09/27/2193605.html
+ -->

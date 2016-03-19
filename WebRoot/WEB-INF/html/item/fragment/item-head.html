@@ -1,0 +1,120 @@
+<!--
+	item 商品
+	admin 当前用户是否为管理员
+	buy 是否在买的页面
+-->
+<div class="row" data-id="${item.id}">
+	<div class="col-xs-3" style="">
+		<a id="img-wrapper" href="javascript:void(0)" data-mfp-src="${ctxPath}${item.imgPath}" data-mfp-title="test...">
+			<img id="item-head-html-img-${item.id}" alt="" src="${ctxPath}${item.imgPath}" class="img-responsive img-thumbnail" />
+		</a>
+	</div>
+	<div class="col-xs-9">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-xs-1 control-label">名称</label>
+				<div class="col-xs-5">
+					<label class="form-control-static"><a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}">${item.name}</a></label>
+				</div>
+			</div>	
+			<div class="form-group">
+				<label class="col-xs-1 control-label">作者</label>
+				<div class="col-xs-5">
+					<label class="form-control-static">${item.author}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-1 control-label">类别</label>
+				<div class="col-xs-5">
+					<label class="form-control-static">${item.category}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-1 control-label">页数</label>
+				<div class="col-xs-5">
+					<label class="form-control-static">${item.page}</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-1 control-label">价格</label>
+				<div class="col-xs-3">
+					<label class="form-control-static">${item.price}</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-1 control-label">库存</label>
+				<div class="col-xs-3">
+					<label class="form-control-static">${item.remain}</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<%if(buy){%>
+				<div class="col-xs-2">
+					<a class="btn btn-success btn-block item-head-html-addToCart" data-id='${item.id}'>加入购物车</a>
+				</div>
+				<%}%> <%if(ai.admin){%>
+				<div class="col-xs-2">
+					<a href="${ctxPath}/item/updateUI?item.id=${item.id}" class="btn btn-warning item-update btn-block">编辑</a>
+				</div>
+				<%}%>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	<%if(buy){%>
+	$( '.item-head-html-addToCart' ).click( function( ) {
+		if ( !( ${ai.logined} ) ) {
+			alert( '你还没有登陆,先去登录吧.' );
+			return;
+		}
+		var ox = $( '#affix' ).offset( ).left + 'px';
+		var oy = $( '#affix' ).offset( ).top + 100 + 'px';
+		var item_id = $( this ).data( 'id' );
+		xzc.addToCart( {
+			'ids[0]' : item_id,
+			'quantities[0]' : 1,
+			add : true
+		} , function( result ) {
+			var $img = $( '#item-head-html-img-' + item_id );
+			$img.clone( ).appendTo( $( 'body' ) ).css( {
+				left : $img.offset( ).left,
+				top : $img.offset( ).top,
+				position : 'absolute',
+				width : '100px',
+				height : '100px',
+			} ).animate( {
+				left : ox,
+				opacity : 0.5,
+			} , 1000 , function( ) {
+				$( this ).animate( {
+					top : oy,
+					opacity : 1,
+				} , 1000 , function( ) {
+					$( this ).remove( );
+				} );
+			} );
+		} );
+	} );
+	<%}%>
+	$( '#img-wrapper' ).magnificPopup( {
+		type : 'image',
+		cursor : null,
+		titleSrc : "test222",
+		mainClass : 'mfp-with-zoom',
+		preloader : true,
+		zoom : {
+			enabled : true,
+			duration : 500,
+			easing : 'ease-in-out',
+			opener : function( openerElement ) {
+				// openerElement is the element on which popup was initialized, in this case its <a> tag
+				// you don't need to add "opener" option if this code matches your needs, it's defailt one.
+				return openerElement.is( 'img' ) ? openerElement : openerElement.find( 'img' );
+			}
+		}
+	} );
+</script>

@@ -1,0 +1,144 @@
+<% var htmlHead={%>
+<title>文件上传测试</title>
+
+<script id="t1" type="text/x-jsrender">
+	<button id="add">添加</button><br/>
+	data-link="name" 相当于把 {\{:name}}注入进来 === 元素.html(name值) <br/>
+	注意trigger=true相当于可以进行联动!<br/>	
+	
+	{^{for users}}
+		<a href="#" class="test">{^{:name}}</a>
+		<a href="#" class="test" data-link="name"></a>
+		<input type="text" data-link="name trigger=true">
+		<button class="edit">修改</button><br/>
+	{{/for}}
+
+</script>
+
+<script type="text/javascript" src="${ctxPath}/js/jsviews.js"></script>
+
+<script type="text/javascript">
+	$( function( ) {
+		$( '#f1' ).fileinput( 'clear' );
+		$( '#f1' ).fileinput( {
+			allowedFileExtensions : [
+					'jpg',
+					'png',
+					'gif' ],
+			minFileCount : 3,
+			//		maxFileCount : 3,
+			//		maxFileSize : 100,
+			//maxFileSize : 1000,
+			//maxFilesNum : 10,
+			//overwriteInitial : true,
+			//allowedFileTypes : [ 'image' ],
+			//showUpload : false,
+			//showCaption : false,
+			//showPreview : false,
+			initialPreviewShowDelete : false,
+			initialPreview : [ '<span class="file-preview-image">upian</span>' ],
+			initialPreviewCount : 2,
+			initialPreviewConfig : [ {
+				caption : 'desert.jpg',
+				width : '120px',
+				key : 100,
+				extra : {
+					id : 100
+				}
+			} ],
+			uploadUrl : '${ctxPath}/test/upload',
+			showRemove : true,
+			//			browseClass : "btn btn-primary btn-lg",
+			//fileType : "image",
+			//	previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			uploadExtraData : {
+				kvId : '10'
+			},
+			fileclear : function( ) {
+				alert( 'clear' );
+			}
+		} );
+		//$( '#f1' ).on( 'filedeleted' , function( event , key ) {
+		//	console.log( 'Key = ' + key );
+		//} );
+		//$( '#f1' ).attr( 'disabled' , 'disabled' );
+		//$( '#f1' ).fileinput( 'refresh' );
+		//$( '#f1' ).fileinput( 'lock' );
+		//$( 'input[type="file"]' ).fileinput( );
+
+		xzc.alert = function( title , content , callback ) {
+			var t = $.templates( '#t1' );
+			var users = [
+					{
+						name : 'xzc'
+					},
+					{
+						name : 'xzc2'
+					} ];
+			t.link( '#ddd' , {
+				users : users
+			} );
+			$( '#add' ).click( function( ) {
+				//插入数据
+				//原有的数据如果有js绑定的话,是不会被改的 	$( '.test' ).click( function( ) {...
+				$.observable( users ).insert( {
+					name : 'xzc3'
+				} );
+			} );
+			$( '.edit' ).click( function( ) {
+				//这里的this是一个button元素
+				//但其实在创建它的时候(通过模板),它就和一些数据进行了绑定
+				//通过$.view(this)就可以找出这些绑定的数据
+				var data = $.view( this ).data;
+				$.observable( data ).setProperty( "name" , data.name + "!" );
+			} );
+
+			$( '.test' ).click( function( ) {
+				alert( 1 );
+			} );
+
+			//$( '.modal' ).modal( 'show' );
+		};
+		/*alert( $( '#modal-wrapper' ).tmpl( {
+			title : 'asdf'
+		} ).html() );*/
+		/*var users = [
+				{
+					name : 'xzc1',
+					age : 21
+				},
+				{
+					name : 'xzc2',
+					age : 22
+				} ];
+		$.template( 't1' , $( '#modal-wrapper' ).html( ) );
+		$.tmpl( 't1' , users ).appendTo( $( 'body' ) ).modal( 'show' );
+		 */
+	} );
+</script>
+<%};%> <% var htmlBody={ %>
+
+<div id="ddd"></div>
+
+<div id="modal-wrapper">
+	<div class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="moda-header">
+					<h4 class="modal-title">your name is \${name}, age is \${age}</h4>
+				</div>
+				<div class="modal-body">I am a body</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<button type="button" class="btn btn-primary" onclick="xzc.alert('1','2');">打开对话框</button>
+
+<form action="${ctxPath}/test/upload" method="post" enctype="multipart/form-data">
+	<input id="f1" type="file" name="img" multiple="" />
+	<button type="submit" class="btn btn-success">提交</button>
+</form>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>

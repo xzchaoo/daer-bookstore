@@ -1,0 +1,143 @@
+<%var htmlHead={%>
+<title>首页</title>
+<script src="${ctxPath}/js/my/template/template.js"></script>
+
+
+
+<script type="text/javascript" src="${ctxPath}/js/messenger/messenger.js"></script>
+<script type="text/javascript" src="${ctxPath}/js/messenger/messenger-theme-future.js"></script>
+
+<link href="${ctxPath}/css/messenger/messenger.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-theme-future.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-theme-block.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-theme-air.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-theme-flat.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-theme-ice.css" rel="stylesheet">
+<link href="${ctxPath}/css/messenger/messenger-spinner.css" rel="stylesheet">
+
+<script>
+	$( function( ) {
+		var msg = Messenger( ).info( {
+			message : "欢迎购物.",
+			hideAfter : 10,
+			showCloseButton : true,
+			actions : {
+				//view : {
+					//label : "查看",
+					//action : function( e , opt ) {
+					//	opt.close();
+						/*opt.update( {
+							message : "成功" + _.random( 0 , 1 ), //[0,1]
+							type : "success",
+						} );*/
+					//}
+				//}
+			}
+		} );
+		xzc.setSecondNav( );
+
+		$( '.img-wrapper' ).magnificPopup( {
+			type : 'image',
+			cursor : null,
+			mainClass : 'mfp-with-zoom',
+			preloader : true,
+			gallery : {
+				enabled : true,
+			},
+			zoom : {
+				enabled : true,
+				duration : 500,
+				easing : 'ease-in-out',
+				opener : function( openerElement ) {
+					return openerElement.is( 'img' ) ? openerElement : openerElement.find( 'img' );
+				}
+			}
+		} );
+
+		for (var i = 0; i < 0; ++i) {
+			$( '<span style="position: absolute;font-size: 40px;">丧失</span>' ).data( 'index' , i )
+					.css( {
+						left : Math.random( ) * document.body.clientWidth,
+						top : Math.random( ) * document.body.clientHeight,
+						fontWeight : 'bold',
+						color : 'rgb(' + ( _.random( 0 , 255 ) ) + ',' + ( _.random( 0 , 255 ) ) + ',' + ( _
+								.random( 0 , 255 ) ) + ')'
+					} ).appendTo( $( 'body' ) ).animate( {
+						left : $( '#lx' ).offset( ).left + 20,
+						top : $( '#lx' ).offset( ).top - 38,
+					} , 1000 , function( ) {
+						if ( $( this ).data( 'index' ) != 1 ) {
+							$( this ).remove( );
+						}
+					} );
+		}
+	} );
+</script>
+<%};%> <%var htmlBody={%>
+
+<div class="jumbotron">
+
+	<div class="row">
+		<div class="col-xs-9">
+			<a class="img-wrapper" href="javascript:void(0)" data-mfp-src="${ctxPath}/images/sshb/index.jpg">
+				<img src="${ctxPath}/images/sshb/index.jpg" class="img-responsive img-thumbnail" />
+			</a>
+		</div>
+		<div class="col-xs-3">
+			<h1>大老师春物课堂开课啦!</h1>
+		</div>
+		<div class="col-xs-12">
+			<h1>
+				<a href="${ctxPath}/item/viewDetailUI?item.id=20">我的青春恋爱物语果然有问题 全套10本 热销中!</a>
+			</h1>
+		</div>
+	</div>
+</div>
+
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-xs-9">
+			<a class="img-wrapper" href="javascript:void(0)" data-mfp-src="${ctxPath}${item.imgPath}">
+				<img src="${ctxPath}${item.imgPath}" class="img-responsive img-thumbnail" />
+			</a>
+		</div>
+		<div class="col-xs-3">
+			<h1>${item.name}</h1>
+		</div>
+		<div class="col-xs-12">
+			<h1>
+				<a href="${ctxPath}/item/viewDetailUI?item.id=${item.id}">${item.name} 热销中!</a>
+			</h1>
+		</div>
+	</div>
+
+</div>
+
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				我们是一家
+				<span id="lx" style="position: relative;">良心</span>
+				书店<br /> <small class="pull-right">专业提供各类书籍</small>
+			</h1>
+		</div>
+	</div>
+</div>
+<!-- 
+<div class="col-xs-12" style="background-color: #9B59B6;">
+	<div class="col-xs-4">
+		<h3>LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISICING.</h3>
+		<p class="lead">Lorem ipsum dolor sit amet, consctetur adipisicing elit, sed do eiusmod.</p>
+	</div>
+	<div class="col-xs-4">
+		<h3>LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISICING.</h3>
+		<p class="lead">Lorem ipsum dolor sit amet, consctetur adipisicing elit, sed do eiusmod.</p>
+	</div>
+	<div class="col-xs-4">
+		<h3>LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISICING.</h3>
+		<p class="lead">Lorem ipsum dolor sit amet, consctetur adipisicing elit, sed do eiusmod.</p>
+	</div>
+</div>
+ -->
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead!'',htmlBody:htmlBody!''}){}%>

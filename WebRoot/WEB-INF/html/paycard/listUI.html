@@ -1,0 +1,29 @@
+<% var htmlHead={%>
+<title>免费充值卡</title>
+<script>
+	
+</script>
+<%};%> <% var htmlBody={ %> <%if(!isEmpty(params.fieldErrorsString)) print(params.fieldErrorsString); %>
+<table class="table table-striped table-bordered table-hover table-condensed">
+	<tr>
+		<th>卡号</th>
+		<th>密码</th>
+		<th>面额</th>
+		<td></td>
+	</tr>
+	<%for(pc in payCardList){%>
+	<tr>
+		<td>${pc.key}</td>
+		<td>${pc.password}</td>
+		<td>${pc.value}</td>
+		<td><a class="btn btn-info btn-block" href="${ctxPath}/paycard/chongzhi?key=${pc.key}&password=${pc.password}">抢</a></td>
+	</tr>
+	<%}%>
+</table>
+<%if(ai.admin){%>
+<a href="${ctxPath}/paycard/addUI" class="btn btn-info">去添加</a>
+<%}%>
+<a href="${ctxPath}/paycard/chongzhiUI" class="btn btn-info">去充值</a>
+<%};%> <%include("/WEB-INF/include/template.html",{htmlHead:htmlHead,htmlBody:htmlBody}){}%>
+
+

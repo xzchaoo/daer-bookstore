@@ -1,0 +1,38 @@
+<div class="row">
+	<div id="viewDetailEvaluation-wrapper" class="col-xs-12">
+		<%#ajax evaluation: {%>
+		<table id="tt" class="x-table-pagination table table-striped table-bordered table-hover table-responsive">
+			<tr>
+				<th>用户名</th>
+				<th>评价</th>
+				<th>打分</th>
+				<th>评价时间</th>
+			</tr>
+
+			<%for(var e in evaluationList){%>
+			<tr>
+				<td>${e.username}</td>
+				<td>${e.evaluation}</td>
+				<td>${e.star}</td>
+				<td>${e.evaluationTime}</td>
+			</tr>
+			<%}%>
+		</table>
+		<%}%>
+	</div>
+	<div id="viewDetailEvaluation-pager" class="col-xs-12 text-center"></div>
+	<script>
+		$( function( ) {
+			xzc.pagination( {
+				url : '${ctxPath}/item/viewDetailEvaluationUI',
+				target : $( '#viewDetailEvaluation-wrapper' ),
+				pager : $( '#viewDetailEvaluation-pager' ),
+				page : ${page},
+				rows : ${rows},
+				total : ${total},
+				'item.id' : ${item.id},
+				ajax:'evaluation'
+			} );
+		} );
+	</script>
+</div>

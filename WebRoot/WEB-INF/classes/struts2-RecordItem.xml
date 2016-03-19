@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 设置struts接收的后缀名 -->
+	<constant name="struts.action.extension" value=",action" />
+	<!-- 可以自动重新加载国际化资源文件和配置文件 
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+-->
+	<package name="recordItem" namespace="/recordItem" extends="parent-config">
+		<default-class-ref class="org.xzc.sshb.action.RecordItemAction" />
+	</package>
+	<package name="recordItem-login" namespace="/recordItem" extends="recordItem">
+		<default-interceptor-ref name="loginStack" />
+		<global-results>
+			<result name="evaluateSuccess" type="redirect">/recordItem/evaluateUI?recordItem.id=${recordItem.id}</result>
+			<result name="evaluateUISuccess">/WEB-INF/html/recordItem/evaluateUI.html</result>
+		</global-results>
+		<action name="evaluateUI" method="evaluateUI" />
+		<action name="evaluate" method="evaluate" />
+	</package>
+
+	<package name="recordItem-admin" namespace="/recordItem" extends="recordItem">
+		<default-interceptor-ref name="adminStack" />
+		<global-results>
+			<result name="setRecordItemStateSuccess" type="redirect">/recordItem/evaluateUI?recordItem.id=${recordItem.id}</result>
+		</global-results>
+		<!-- TODO for debug -->
+		<action name="setRecordItemState" method="setRecordItemState" />
+	</package>
+
+</struts>
